@@ -10,8 +10,9 @@ using System.Windows.Forms;
 
 namespace MEdit {
     public partial class MainForm : Form {
-        public MainForm() {
+        public MainForm(TextView textView) {
             InitializeComponent();
+            this.Controls.Add(textView);
         }
     }
 }
