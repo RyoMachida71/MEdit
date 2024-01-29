@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MEdit.Ui;
+using System;
 using System.Windows.Forms;
 
 namespace MEdit {
@@ -13,7 +11,7 @@ namespace MEdit {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(new TextView()));
+            Application.Run(new MainForm(new TextArea()));
         }
     }
 }

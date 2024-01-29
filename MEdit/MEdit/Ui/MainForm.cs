@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MEdit.Ui;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +11,9 @@ using System.Windows.Forms;
 
 namespace MEdit {
     public partial class MainForm : Form {
-        public MainForm(TextView textView) {
+        public MainForm(TextArea textArea) {
             InitializeComponent();
-            this.Controls.Add(textView);
+            this.Controls.Add(textArea);
         }
     }
 }
