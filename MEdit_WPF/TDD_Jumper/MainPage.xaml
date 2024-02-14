@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="TDD_Jumper.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TDD_Jumper"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Viewbox>
+            <Canvas Name="Field" Width="600" Height="400">
+                <Image Name="Stickman"
+                       Source="/images/stickman.png"
+                       Canvas.Left="20" Canvas.Top="200" Width="150" Height="200" />
+                <Rectangle Name="Box" Canvas.Top="300" Width="50" Height="200" Fill="Black"/>
+                <TextBlock x:Name="GameOver" Text="Game Over" FontSize="50" Width="600" Height="100" Visibility="Collapsed" TextAlignment="Center"/>
+            </Canvas>
+        </Viewbox>
+    </Grid>
+</Page>
