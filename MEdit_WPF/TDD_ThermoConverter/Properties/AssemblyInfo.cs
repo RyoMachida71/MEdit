@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: InternalsVisibleTo("TDD_ThermoConverter.Test")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //
