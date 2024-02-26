@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/MEdit_WPF/TDD_Jumper/Assets/*.png
+/MEdit_WPF/TDD_Jumper/Images/*.png
