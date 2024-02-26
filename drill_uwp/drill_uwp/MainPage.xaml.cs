@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.Effects;
+using System;
+using System.Numerics;
+using Windows.UI;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // 空白ページの項目テンプレートについては、https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x411 を参照してください
 
@@ -22,14 +14,34 @@ namespace drill_uwp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        Random rnd = new Random();
+
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        private void CanvasControl_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args) {
-            args.DrawingSession.DrawEllipse(155, 115, 80, 30, Windows.UI.Colors.Black, 3);
-            args.DrawingSession.DrawText("Hello, Win2D World!", 100, 100, Windows.UI.Colors.Yellow);
+        private Vector2 RndPosition() {
+            var x = rnd.NextDouble() * 500f;
+            var y = rnd.NextDouble() * 500f;
+            return new Vector2((float)x, (float)y);
+        }
+
+        private float RndRadius() => (float)rnd.NextDouble() * 150f;
+
+        private byte RndByte() => (byte)rnd.Next(256);
+
+        private void canvas_Draw(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasDrawEventArgs args) {
+            for (int i = 0; i < 100; ++i) {
+                args.DrawingSession.DrawText("Hello, World!", RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
+                args.DrawingSession.DrawCircle(RndPosition(), RndRadius(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
+                args.DrawingSession.DrawLine(RndPosition(), RndPosition(), Color.FromArgb(255, RndByte(), RndByte(), RndByte()));
+            }
+        }
+
+        private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
+            this.canvas.RemoveFromVisualTree();
+            this.canvas = null;
         }
     }
 }
