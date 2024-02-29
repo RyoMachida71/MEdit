@@ -1,5 +1,5 @@
-﻿<Page
-    x:Class="drill_uwp.MainPage"
+﻿<UserControl
+    x:Class="drill_uwp.MyUserControl1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:drill_uwp"
@@ -7,9 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     mc:Ignorable="d"
-    Unloaded="Page_Unloaded">
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <local:MyUserControl1/>
+    <Grid>
+        <canvas:CanvasControl x:Name="canvas" Draw="canvas_Draw" Background="White"/>
     </Grid>
-</Page>
+</UserControl>

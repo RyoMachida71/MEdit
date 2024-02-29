@@ -40,8 +40,8 @@ namespace drill_uwp
         }
 
         private void Page_Unloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e) {
-            this.canvas.RemoveFromVisualTree();
-            this.canvas = null;
+            //this.canvas.RemoveFromVisualTree();
+            //this.canvas = null;
         }
     }
 }
