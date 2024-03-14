@@ -5,8 +5,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.TextFormatting;
 
 namespace MEdit_wpf {
     public class TextEditArea : Control {
@@ -28,8 +30,15 @@ namespace MEdit_wpf {
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
             var text = _buffer.ToString();
-            var format = new FormattedText(text, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Verdana"), (double)10, Brushes.Black, (double)1);
-            dc.DrawText(format, _topLeft);
+            if (text.Length <= 0) return;
+            var formatter = TextFormatter.Create();
+            // todo: 各種引数の設定
+            var line = formatter.FormatLine(new PlainTextSource(text, new PlainTextRunProperty(new Typeface("Verdana"), 10, 10, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture))
+                                            , 0
+                                            , 400
+                                            , new GeneralTextParagraphProperties()
+                                            , null);
+            line.Draw(dc, _topLeft, InvertAxes.None);
         }
 
         private void TextEditArea_GotFocus(object sender, RoutedEventArgs args) {
