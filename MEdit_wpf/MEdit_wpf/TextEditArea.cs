@@ -32,11 +32,13 @@ namespace MEdit_wpf {
             var text = _buffer.ToString();
             if (text.Length <= 0) return;
             var formatter = TextFormatter.Create();
+            var textRunProperty = new PlainTextRunProperty(new Typeface("Verdana"), 10, 10, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
+            var textRun = new PlainTextSource(text, textRunProperty);
             // todo: 各種引数の設定
-            var line = formatter.FormatLine(new PlainTextSource(text, new PlainTextRunProperty(new Typeface("Verdana"), 10, 10, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture))
+            var line = formatter.FormatLine(textRun
                                             , 0
                                             , 400
-                                            , new GeneralTextParagraphProperties()
+                                            , new GeneralTextParagraphProperties(false, textRunProperty, 10, new GeneralTextMarkerProperties(0, textRun))
                                             , null);
             line.Draw(dc, _topLeft, InvertAxes.None);
         }

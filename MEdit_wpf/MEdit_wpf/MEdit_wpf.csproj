@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GeneralTextMarkerProperties.cs" />
     <Compile Include="GeneralTextParagraphProperties.cs" />
     <Compile Include="PlainTextRunProperty.cs" />
     <Compile Include="PlainTextSource.cs" />

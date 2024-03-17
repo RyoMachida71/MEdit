@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.TextFormatting;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MEdit_wpf {
     public class PlainTextSource :TextSource {
