@@ -59,6 +59,7 @@
     <Compile Include="GeneralTextParagraphProperties.cs" />
     <Compile Include="PlainTextRunProperty.cs" />
     <Compile Include="PlainTextSource.cs" />
+    <Compile Include="TextDocument.cs" />
     <Compile Include="TextEditArea.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

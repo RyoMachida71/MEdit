@@ -10,7 +10,6 @@ namespace MEdit_wpf {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            // ここでTextEditAreaにフォーカスを設定したい
             TextEditArea.Focus();
         }
     }
