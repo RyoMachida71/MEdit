@@ -32,7 +32,7 @@ namespace MEdit_wpf {
             while (rs.Peek() > -1) {
                 var line = rs.ReadLine();
                 var formatter = TextFormatter.Create();
-                var textRunProperty = new PlainTextRunProperty(new Typeface("Verdana"), 12, 12, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
+                var textRunProperty = new PlainTextRunProperty(new Typeface("ＭＳ ゴシック"), 12, 12, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
                 var textRun = new PlainTextSource(line, textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
                                                 , 0
