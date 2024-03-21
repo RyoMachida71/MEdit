@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
+        <local:TextArea x:Name="TextArea" Focusable="True"/>
+        <!--
         <local:TextEditArea x:Name="TextEditArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Focusable="True">
         </local:TextEditArea>
+        -->
     </Grid>
 </Window>

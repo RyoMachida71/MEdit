@@ -1,19 +1,33 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace MEdit_wpf {
-    public class TextEditArea : Control {
+    /// <summary>
+    /// TextArea.xaml の相互作用ロジック
+    /// </summary>
+    public partial class TextArea : Control {
 
         private TextDocument _document;
 
-        public TextEditArea() {
+        public TextArea() {
+            InitializeComponent();
             _document = new TextDocument();
-            this.GotFocus += TextEditArea_GotFocus;
         }
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
@@ -30,11 +44,11 @@ namespace MEdit_wpf {
             while (rs.Peek() > -1) {
                 var line = rs.ReadLine();
                 var formatter = TextFormatter.Create();
-                var textRunProperty = new PlainTextRunProperty(new Typeface("ＭＳ ゴシック"), 12, 12, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
+                var textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), 12, 12, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
                 var textRun = new PlainTextSource(line, textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
                                                 , 0
-                                                , double.MaxValue
+                                                , (double)this.ActualWidth
                                                 , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                                 , null);
                 visualLine.Draw(dc, new Point(0, lineYPos), InvertAxes.None);
@@ -42,12 +56,14 @@ namespace MEdit_wpf {
             }
         }
 
-        private void TextEditArea_KeyDown(object sender, KeyEventArgs e) {
-
+        private void TextArea_KeyDown(object sender, KeyEventArgs e) {
+            // todo: キー補足
         }
 
-        private void TextEditArea_GotFocus(object sender, RoutedEventArgs args) {
-            Keyboard.Focus(this);
+        private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
+            if (this.IsFocused) {
+                Keyboard.Focus(this);
+            }
         }
     }
 }
