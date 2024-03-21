@@ -11,8 +11,6 @@ namespace MEdit_wpf {
 
         private TextDocument _document;
 
-        private Point _topLeft = new Point(0, 0);
-
         public TextEditArea() {
             _document = new TextDocument();
             this.GotFocus += TextEditArea_GotFocus;
@@ -36,12 +34,16 @@ namespace MEdit_wpf {
                 var textRun = new PlainTextSource(line, textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
                                                 , 0
-                                                , 400
+                                                , double.MaxValue
                                                 , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                                 , null);
                 visualLine.Draw(dc, new Point(0, lineYPos), InvertAxes.None);
                 lineYPos += visualLine.Height;
             }
+        }
+
+        private void TextEditArea_KeyDown(object sender, KeyEventArgs e) {
+
         }
 
         private void TextEditArea_GotFocus(object sender, RoutedEventArgs args) {
