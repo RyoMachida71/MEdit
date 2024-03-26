@@ -17,13 +17,6 @@ namespace MEdit_wpf {
             get { return _buffer.ToString(); }
             set { _buffer = new StringBuilder(value); }
         }
-
-        public void Insert(int insertPos, string text) {
-            if (insertPos > _buffer.Length) insertPos = _buffer.Length;
-            if (insertPos < 0) insertPos = 0;
-            _buffer.Insert(insertPos, text);
-        }
-
         public ImmutableList<string> Lines {
             get {
                 _lines.Clear();
@@ -35,5 +28,12 @@ namespace MEdit_wpf {
                 return _lines.ToImmutableList();
             }
         }
+
+        public void Insert(int insertPos, string text) {
+            if (insertPos > _buffer.Length) insertPos = _buffer.Length;
+            if (insertPos < 0) insertPos = 0;
+            _buffer.Insert(insertPos, text);
+        }
+
     }
 }

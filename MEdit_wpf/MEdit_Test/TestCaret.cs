@@ -25,5 +25,16 @@ namespace MEdit_Test {
             Assert.That(caret.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Column, Is.EqualTo(expectedColumn));
         }
+
+        [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
+        [TestCase("abc", 0, 5, TestName = "OrdinalInput")]
+        public void TestCaretPositionUpdateByInput(string input, int expectedRow, int expectedColumn) {
+            var caret = new Caret(new TextDocument("test"));
+            caret.Row = 0;
+            caret.Column = 2;
+            caret.UpdatePos(input);
+            Assert.That(caret.Row, Is.EqualTo(expectedRow));
+            Assert.That(caret.Column, Is.EqualTo(expectedColumn));
+        }
     }
 }

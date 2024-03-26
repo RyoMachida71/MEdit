@@ -15,6 +15,15 @@ namespace MEdit_wpf {
 
         public int Column { get; set; }
 
+        public void UpdatePos(string input) {
+            if (input == "\r\n") {
+                ++this.Row;
+                this.Column = 0;
+            } else {
+                this.Column += input.Length;
+            }
+        }
+
         public void Move(CaretMovementType movement) {
             if (_document.Lines.Count == 0) return;
             switch (movement) {

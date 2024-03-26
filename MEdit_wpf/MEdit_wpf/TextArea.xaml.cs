@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
@@ -14,39 +15,44 @@ namespace MEdit_wpf {
 
         private TextDocument _document;
 
+        private Caret _caret;
+
         public TextArea() {
             InitializeComponent();
             _document = new TextDocument();
+            _caret = new Caret(_document);
         }
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             // todo: キャレットの位置にinsert
-            _document.Insert(_document.Text.Length, e.Text);
+            string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
+            _document.Insert(_caret.Column, input);
+            _caret.UpdatePos(input);
             this.InvalidateVisual();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            var rs = new StringReader(_document.Text);
-            double lineYPos = 0;
-            while (rs.Peek() > -1) {
-                var line = rs.ReadLine();
-                var formatter = TextFormatter.Create();
-                var textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), 12, 12, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
-                var textRun = new PlainTextSource(line, textRunProperty);
-                var visualLine = formatter.FormatLine(textRun
-                                                , 0
-                                                , (double)this.ActualWidth
-                                                , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
-                                                , null);
-                visualLine.Draw(dc, new Point(0, lineYPos), InvertAxes.None);
-                lineYPos += visualLine.Height;
+            var renderer = new VisualText();
+            renderer.DrawVisualLines(dc, _document.Lines);
+
+            // todo: キャレットの描画クラスを作成する
+            var textLine = renderer.GetLocationByRow(_caret.Row);
+            double xPos, yPos;
+            if (textLine == null) {
+                xPos = 0;
+                yPos = 0;
+            } else {
+                xPos = textLine.GetDistanceFromCharacterHit(new CharacterHit(_caret.Column, 0));
+                yPos = textLine.Height * _caret.Row - textLine.Height;
+                if (yPos < 0) yPos = 0;
             }
+            dc.DrawRectangle(Brushes.Black, null, new Rect(xPos, yPos, 2, 12));
         }
 
         private void TextArea_KeyDown(object sender, KeyEventArgs e) {
-            // todo: キー補足
+            // todo: コマンドバインディングを使用する
         }
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
