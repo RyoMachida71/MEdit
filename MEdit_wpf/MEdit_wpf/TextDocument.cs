@@ -23,7 +23,7 @@ namespace MEdit_wpf {
                 if (string.IsNullOrEmpty(this.Text)) return _lines.ToImmutableList();
                 var reader = new StringReader(this.Text);
                 while (reader.Peek() > -1) {
-                    _lines.Add(reader.ReadLine());
+                    _lines.Add(reader.ReadLine() + "\r\n");
                 }
                 return _lines.ToImmutableList();
             }

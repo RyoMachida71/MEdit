@@ -25,9 +25,9 @@ namespace MEdit_wpf {
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
-            // todo: キャレットの位置にinsert
+            // todo: キャレットの位置(Offset)にinsert
             string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
-            _document.Insert(_caret.Column, input);
+            _document.Insert(_document.Text.Length, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }
@@ -38,17 +38,8 @@ namespace MEdit_wpf {
             renderer.DrawVisualLines(dc, _document.Lines);
 
             // todo: キャレットの描画クラスを作成する
-            var textLine = renderer.GetLocationByRow(_caret.Row);
-            double xPos, yPos;
-            if (textLine == null) {
-                xPos = 0;
-                yPos = 0;
-            } else {
-                xPos = textLine.GetDistanceFromCharacterHit(new CharacterHit(_caret.Column, 0));
-                yPos = textLine.Height * _caret.Row - textLine.Height;
-                if (yPos < 0) yPos = 0;
-            }
-            dc.DrawRectangle(Brushes.Black, null, new Rect(xPos, yPos, 2, 12));
+            var caretRenderPos = renderer.GetPhisicalPositionByLogicalLocation(_caret.Row, _caret.Column);
+            dc.DrawRectangle(Brushes.Black, null, new Rect(caretRenderPos.X, caretRenderPos.Y, 2, 12));
         }
 
         private void TextArea_KeyDown(object sender, KeyEventArgs e) {
