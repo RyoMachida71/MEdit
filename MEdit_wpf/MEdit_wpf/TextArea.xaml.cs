@@ -27,7 +27,7 @@ namespace MEdit_wpf {
             base.OnTextInput(e);
             // todo: キャレットの位置(Offset)にinsert
             string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
-            _document.Insert(_document.Text.Length, input);
+            _document.Insert(_caret.Offset, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }

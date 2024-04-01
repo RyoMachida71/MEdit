@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace MEdit_wpf {
     public class TextDocument {
 
-        private List<string> _lines = new List<string>();
+        private List<DocumentLine> _lines = new List<DocumentLine>();
 
         private StringBuilder _buffer;
         public TextDocument(string text = "") {
@@ -17,16 +19,30 @@ namespace MEdit_wpf {
             get { return _buffer.ToString(); }
             set { _buffer = new StringBuilder(value); }
         }
-        public ImmutableList<string> Lines {
+
+        public ImmutableList<DocumentLine> Lines {
             get {
                 _lines.Clear();
                 if (string.IsNullOrEmpty(this.Text)) return _lines.ToImmutableList();
+
                 var reader = new StringReader(this.Text);
+                int lineNumber = 0;
+                int offset = 0;
                 while (reader.Peek() > -1) {
-                    _lines.Add(reader.ReadLine() + "\r\n");
+                    var line = reader.ReadLine() + "\r\n";
+                    _lines.Add(new DocumentLine(lineNumber, offset, line));
+                    ++lineNumber;
+                    offset += line.Length;
                 }
                 return _lines.ToImmutableList();
             }
+        }
+
+        public int GetOffsetByLine(int row, int col) {
+            var line = Lines.Find(x => x.LineNumber == row);
+            if (line == null) return _buffer.Length;
+
+            return line.Offset + col;
         }
 
         public void Insert(int insertPos, string text) {

@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Caret.cs" />
     <Compile Include="CaretMovementType.cs" />
+    <Compile Include="DocumentLine.cs" />
     <Compile Include="GeneralTextMarkerProperties.cs" />
     <Compile Include="GeneralTextParagraphProperties.cs" />
     <Compile Include="PlainTextRunProperty.cs" />

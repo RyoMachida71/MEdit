@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace MEdit_wpf {
     public class Caret {
 
@@ -14,6 +12,8 @@ namespace MEdit_wpf {
         public int Row { get; set; }
 
         public int Column { get; set; }
+
+        public int Offset =>_document.GetOffsetByLine(Row, Column);
 
         public void UpdatePos(string input) {
             if (input == "\r\n") {
@@ -73,14 +73,14 @@ namespace MEdit_wpf {
             var rowAfterMove = this.Row - 1;
             if (rowAfterMove >= 0) {
                 this.Row = rowAfterMove;
-                this.Column = _document.Lines[rowAfterMove].Length - 1;
+                this.Column = _document.Lines[rowAfterMove].Text.Length - 1;
             }
         }
 
         private void MoveCharRight() {
             var colAfterMove = this.Column + 1;
             var currentLine = _document.Lines[this.Row];
-            if (colAfterMove < currentLine.Length - 1) {
+            if (colAfterMove < currentLine.Text.Length - 1) {
                 this.Column = colAfterMove;
                 return;
             }
@@ -97,8 +97,8 @@ namespace MEdit_wpf {
 
             this.Row = rowAfterMove;
             var upLine = _document.Lines[rowAfterMove];
-            if (this.Column > upLine.Length - 1) {
-                this.Column = upLine.Length - 1;
+            if (this.Column > upLine.Text.Length - 1) {
+                this.Column = upLine.Text.Length - 1;
             }
         }
 
@@ -108,8 +108,8 @@ namespace MEdit_wpf {
 
             this.Row = rowAfterMove;
             var downLine = _document.Lines[rowAfterMove];
-            if (this.Column > downLine.Length - 1) {
-                this.Column = downLine.Length - 1;
+            if (this.Column > downLine.Text.Length - 1) {
+                this.Column = downLine.Text.Length - 1;
             }
         }
     }

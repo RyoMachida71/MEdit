@@ -19,13 +19,13 @@ namespace MEdit_wpf {
 
         private TextParagraphProperties _paragrapghProp;
 
-        public void DrawVisualLines(DrawingContext dc, IImmutableList<string> textLines) {
+        public void DrawVisualLines(DrawingContext dc, IImmutableList<DocumentLine> textLines) {
             _visualLines.Clear();
             _lineYPos = 0;
             foreach (var line in textLines) {
                 var formatter = TextFormatter.Create();
                 var textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
-                var textRun = new PlainTextSource(line, textRunProperty);
+                var textRun = new PlainTextSource(line.Text, textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
                                                 , 0
                                                 , MaxParagraphWidth
