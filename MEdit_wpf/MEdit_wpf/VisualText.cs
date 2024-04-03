@@ -39,15 +39,13 @@ namespace MEdit_wpf {
         }
 
         public Point GetPhisicalPositionByLogicalLocation(int row, int col) {
-            var count = _visualLines.Count;
-
-            if (count == 0) return new Point(0, 0);
-
-            if (count - 1 < row) return new Point(0, _lineYPos);
+            if (_visualLines.Count == 0) return new Point(0, 0);
+            if (_visualLines.Count - 1 < row) return new Point(0, _lineYPos);
 
             var textLine = _visualLines[row];
             var xPos = textLine.GetDistanceFromCharacterHit(new CharacterHit(col, 0));
-            return new Point(xPos, _lineYPos - FontSize);
+            var yPos = row * textLine.Height;
+            return new Point(xPos, yPos);
         }
     }
 }

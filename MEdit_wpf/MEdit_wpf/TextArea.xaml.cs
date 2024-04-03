@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -20,12 +21,13 @@ namespace MEdit_wpf {
         public TextArea() {
             InitializeComponent();
             _document = new TextDocument();
-            _caret = new Caret(_document);
+            _caret = new Caret(_document, this.InvalidateVisual);
+
+            CaretCommandBinder.SetBinding(_caret, this.CommandBindings, this.InputBindings);
         }
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
-            // todo: キャレットの位置(Offset)にinsert
             string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
             _document.Insert(_caret.Offset, input);
             _caret.UpdatePos(input);
@@ -37,13 +39,8 @@ namespace MEdit_wpf {
             var renderer = new VisualText();
             renderer.DrawVisualLines(dc, _document.Lines);
 
-            // todo: キャレットの描画クラスを作成する
             var caretRenderPos = renderer.GetPhisicalPositionByLogicalLocation(_caret.Row, _caret.Column);
             dc.DrawRectangle(Brushes.Black, null, new Rect(caretRenderPos.X, caretRenderPos.Y, 2, 12));
-        }
-
-        private void TextArea_KeyDown(object sender, KeyEventArgs e) {
-            // todo: コマンドバインディングを使用する
         }
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {

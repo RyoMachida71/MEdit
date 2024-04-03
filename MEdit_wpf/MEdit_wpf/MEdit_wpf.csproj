@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Caret.cs" />
+    <Compile Include="CaretCommandBinder.cs" />
     <Compile Include="CaretMovementType.cs" />
     <Compile Include="DocumentLine.cs" />
     <Compile Include="GeneralTextMarkerProperties.cs" />
