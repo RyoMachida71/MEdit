@@ -1,7 +1,8 @@
 ﻿using MEdit_wpf;
-using NUnit.Framework.Internal.Execution;
 
 namespace MEdit_Test {
+    // todo: テストコードを実行した際に以下の例外が発生する。要調査
+    // System.IO.FileNotFoundException : Could not load file or assembly 'PresentationCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'. 指定されたファイルが見つかりません。
     public class TestCaret {
 
         private static readonly Action EmptyAction = () => { };
