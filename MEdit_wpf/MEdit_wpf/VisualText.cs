@@ -15,10 +15,6 @@ namespace MEdit_wpf {
 
         private double _lineYPos = 0;
 
-        private TextRunProperties _runProp;
-
-        private TextParagraphProperties _paragrapghProp;
-
         public void DrawVisualLines(DrawingContext dc, IImmutableList<DocumentLine> textLines) {
             _visualLines.Clear();
             _lineYPos = 0;
