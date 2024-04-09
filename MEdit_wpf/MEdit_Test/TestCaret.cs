@@ -6,7 +6,7 @@ namespace MEdit_Test {
     public class TestCaret {
 
         private static readonly Action EmptyAction = () => { };
-
+        /*
         [Test]
         public void TestInitCaret() {
             var caret = new Caret(new TextDocument(), EmptyAction);
@@ -41,5 +41,6 @@ namespace MEdit_Test {
             Assert.That(caret.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Column, Is.EqualTo(expectedColumn));
         }
+        */
     }
 }

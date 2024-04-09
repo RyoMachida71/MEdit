@@ -1,12 +1,8 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Runtime.CompilerServices;
+﻿using MEdit_wpf.Layer;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.TextFormatting;
 
 namespace MEdit_wpf {
     /// <summary>
@@ -14,33 +10,56 @@ namespace MEdit_wpf {
     /// </summary>
     public partial class TextArea : Control {
 
-        private TextDocument _document;
-
         private Caret _caret;
+
+        private CaretLayer _caretLayer;
+
+        public event RoutedEventHandler TextAreaRendered;
 
         public TextArea() {
             InitializeComponent();
-            _document = new TextDocument();
-            _caret = new Caret(_document, this.InvalidateVisual);
+            Document = new TextDocument();
+            VisualText = new VisualText();
+            _caret = new Caret(this);
+            _caretLayer = new CaretLayer();
+
+            AddVisualChild(_caretLayer);
 
             CaretCommandBinder.SetBinding(_caret, this.CommandBindings, this.InputBindings);
         }
 
+        public ICaretLayer CaretLayer => _caretLayer;
+
+        public VisualText VisualText { get; private set; }
+
+        public TextDocument Document { get; private set; }
+
+        protected override int VisualChildrenCount => 1;
+
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
-            _document.Insert(_caret.Offset, input);
+            Document.Insert(_caret.Offset, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            var renderer = new VisualText();
-            renderer.DrawVisualLines(dc, _document.Lines);
+            VisualText.DrawVisualLines(dc, Document.Lines);
 
-            var caretRenderPos = renderer.GetPhisicalPositionByLogicalLocation(_caret.Row, _caret.Column);
-            dc.DrawRectangle(Brushes.Black, null, new Rect(caretRenderPos.X, caretRenderPos.Y, 2, 12));
+            if (TextAreaRendered != null) {
+                TextAreaRendered(this, new RoutedEventArgs());
+            }
+        }
+
+        protected override Visual GetVisualChild(int index) {
+            switch (index) {
+                case (int)LayerKind.Caret:
+                    return _caretLayer;
+                default:
+                    return base.GetVisualChild(index);
+            }
         }
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
