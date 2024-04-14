@@ -5,21 +5,20 @@ namespace MEdit_wpf {
 
         private const string Eol = "\r\n";
 
-        private TextArea _textArea;
+        private TextDocument _document;
 
-        public Caret(TextArea textArea) {
+        public Caret(TextDocument document) {
             Row = Column = 0;
-            _textArea = textArea;
-            _textArea.TextAreaRendered += (s, e) => Show();
+            _document = document;
         }
 
         public int Row { get; set; }
 
         public int Column { get; set; }
 
-        public int Offset =>_textArea.Document.GetOffsetByLine(Row, Column);
+        public int Offset =>_document.GetOffset(Row, Column);
 
-        public event RoutedEventHandler CaretPositionChanged;
+        public event RoutedEventHandler PositionChanged;
 
         public void UpdatePos(string input) {
             if (input == Eol) {
@@ -31,7 +30,7 @@ namespace MEdit_wpf {
         }
 
         public void OnMove(CaretMovementType movement) {
-            if (_textArea.Document.Lines.Count == 0) return;
+            if (_document.Lines.Count == 0) return;
 
             switch (movement) {
                 case CaretMovementType.None:
@@ -69,14 +68,9 @@ namespace MEdit_wpf {
                 default:
                     break;
             }
-            if (CaretPositionChanged != null) {
-                CaretPositionChanged(this, new RoutedEventArgs());
+            if (PositionChanged != null) {
+                PositionChanged(this, new RoutedEventArgs());
             }
-            Show();
-        }
-
-        private void Show() {
-            _textArea.CaretLayer.Render(_textArea.VisualText.GetPhisicalPositionByLogicalLocation(Row, Column));
         }
 
         private void MoveCharLeft() {
@@ -87,19 +81,19 @@ namespace MEdit_wpf {
             var rowAfterMove = this.Row - 1;
             if (rowAfterMove >= 0) {
                 this.Row = rowAfterMove;
-                this.Column = _textArea.Document.Lines[rowAfterMove].Text.Length - Eol.Length;
+                this.Column = _document.Lines[rowAfterMove].Text.Length - Eol.Length;
             }
         }
 
         private void MoveCharRight() {
             var colAfterMove = this.Column + 1;
-            var currentLine = _textArea.Document.Lines[this.Row];
+            var currentLine = _document.Lines[this.Row];
             if (colAfterMove < currentLine.Text.Length - 1) {
                 this.Column = colAfterMove;
                 return;
             }
             var rowAfterMove = this.Row + 1;
-            if (rowAfterMove <= _textArea.Document.Lines.Count - 1) {
+            if (rowAfterMove <= _document.Lines.Count - 1) {
                 this.Row = rowAfterMove;
                 this.Column = 0;
             }
@@ -110,7 +104,7 @@ namespace MEdit_wpf {
             if (rowAfterMove < 0) return;
 
             this.Row = rowAfterMove;
-            var upLine = _textArea.Document.Lines[rowAfterMove];
+            var upLine = _document.Lines[rowAfterMove];
             if (this.Column > upLine.Text.Length - Eol.Length) {
                 this.Column = upLine.Text.Length - Eol.Length;
             }
@@ -118,10 +112,10 @@ namespace MEdit_wpf {
 
         private void MoveLineDown() {
             var rowAfterMove = this.Row + 1;
-            if (rowAfterMove > _textArea.Document.Lines.Count - 1) return;
+            if (rowAfterMove > _document.Lines.Count - 1) return;
 
             this.Row = rowAfterMove;
-            var downLine = _textArea.Document.Lines[rowAfterMove];
+            var downLine = _document.Lines[rowAfterMove];
             if (this.Column > downLine.Text.Length - Eol.Length) {
                 this.Column = downLine.Text.Length - Eol.Length;
             }

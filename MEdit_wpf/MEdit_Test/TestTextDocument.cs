@@ -23,11 +23,11 @@ namespace MEdit_Test {
             var document = new TextDocument(text);
             Assert.That(document.Lines, Has.Count.EqualTo(2));
 
-            var offset = document.GetOffsetByLine(0, 0);
+            var offset = document.GetOffset(0, 0);
             Assert.That(offset, Is.EqualTo(0));
             Assert.That(document.Text[offset], Is.EqualTo('T'));
 
-            offset = document.GetOffsetByLine(1, 3);
+            offset = document.GetOffset(1, 3);
             Assert.That(offset, Is.EqualTo(28));
             Assert.That(document.Text[offset], Is.EqualTo('s'));
         }

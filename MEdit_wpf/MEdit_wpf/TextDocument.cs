@@ -36,7 +36,7 @@ namespace MEdit_wpf {
             }
         }
 
-        public int GetOffsetByLine(int row, int col) {
+        public int GetOffset(int row, int col) {
             var line = Lines.Find(x => x.LineNumber == row);
             if (line == null) return _buffer.Length;
 

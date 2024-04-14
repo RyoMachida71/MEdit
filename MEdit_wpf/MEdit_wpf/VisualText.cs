@@ -34,7 +34,7 @@ namespace MEdit_wpf {
             }
         }
 
-        public Point GetPhisicalPositionByLogicalLocation(int row, int col) {
+        public Point GetPhisicalPositionByLogicalOne(int row, int col) {
             if (_visualLines.Count == 0) return new Point(0, 0);
             if (_visualLines.Count - 1 < row) return new Point(0, _lineYPos);
 
