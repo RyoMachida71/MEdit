@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using System;
 
 namespace MEdit_wpf {
     public class Caret {
@@ -7,9 +7,12 @@ namespace MEdit_wpf {
 
         private TextDocument _document;
 
-        public Caret(TextDocument document) {
+        private Action _showCaret;
+
+        public Caret(TextDocument document, Action showCaret) {
             Row = Column = 0;
             _document = document;
+            _showCaret = showCaret;
         }
 
         public int Row { get; set; }
@@ -18,8 +21,6 @@ namespace MEdit_wpf {
 
         public int Offset =>_document.GetOffset(Row, Column);
 
-        public event RoutedEventHandler PositionChanged;
-
         public void UpdatePos(string input) {
             if (input == Eol) {
                 ++this.Row;
@@ -27,6 +28,10 @@ namespace MEdit_wpf {
             } else {
                 this.Column += input.Length;
             }
+        }
+
+        public void Test(CaretMovementType type) {
+
         }
 
         public void OnMove(CaretMovementType movement) {
@@ -68,8 +73,8 @@ namespace MEdit_wpf {
                 default:
                     break;
             }
-            if (PositionChanged != null) {
-                PositionChanged(this, new RoutedEventArgs());
+            if (_showCaret != null) {
+                _showCaret();
             }
         }
 

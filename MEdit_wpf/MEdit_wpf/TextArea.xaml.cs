@@ -15,18 +15,14 @@ namespace MEdit_wpf {
         private CaretLayer _caretLayer;
         private VisualText _visualText;
 
-        public event RoutedEventHandler TextAreaRendered;
-
         public TextArea() {
             InitializeComponent();
             _document = new TextDocument();
             _visualText = new VisualText();
-            _caret = new Caret(_document);
+            _caret = new Caret(_document, RenderCaret);
             _caretLayer = new CaretLayer();
 
             AddVisualChild(_caretLayer);
-
-            _caret.PositionChanged += Caret_PositionChanged;
             CaretCommandBinder.SetBinding(_caret, this.CommandBindings, this.InputBindings);
         }
 
@@ -43,7 +39,7 @@ namespace MEdit_wpf {
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
             _visualText.DrawVisualLines(dc, _document.Lines);
-            _caretLayer.Render(_visualText.GetPhisicalPositionByLogicalOne(_caret.Row, _caret.Column));
+            RenderCaret();
         }
 
         protected override Visual GetVisualChild(int index) {
@@ -61,7 +57,7 @@ namespace MEdit_wpf {
             }
         }
 
-        private void Caret_PositionChanged(object sender, RoutedEventArgs args) {
+        private void RenderCaret() {
             _caretLayer.Render(_visualText.GetPhisicalPositionByLogicalOne(_caret.Row, _caret.Column));
         }
     }
