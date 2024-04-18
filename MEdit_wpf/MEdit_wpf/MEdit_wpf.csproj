@@ -77,11 +77,14 @@
     <Compile Include="DocumentLine.cs" />
     <Compile Include="GeneralTextMarkerProperties.cs" />
     <Compile Include="GeneralTextParagraphProperties.cs" />
+    <Compile Include="ITextDocument.cs" />
     <Compile Include="Layer\CaretLayer.cs" />
     <Compile Include="Layer\ICaretLayer.cs" />
     <Compile Include="Layer\LayerKind.cs" />
     <Compile Include="PlainTextRunProperty.cs" />
     <Compile Include="PlainTextSource.cs" />
+    <Compile Include="Selection\ISelection.cs" />
+    <Compile Include="Selection\SingleSelection.cs" />
     <Compile Include="TextArea.xaml.cs">
       <DependentUpon>TextArea.xaml</DependentUpon>
     </Compile>

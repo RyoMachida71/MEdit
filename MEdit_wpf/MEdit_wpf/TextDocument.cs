@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 
 namespace MEdit_wpf {
-    public class TextDocument {
+    public class TextDocument : ITextDocument {
 
         private List<DocumentLine> _lines = new List<DocumentLine>();
 
@@ -36,12 +37,6 @@ namespace MEdit_wpf {
             }
         }
 
-        public int GetOffset(int row, int col) {
-            var line = Lines.Find(x => x.LineNumber == row);
-            if (line == null) return _buffer.Length;
-
-            return line.Offset + col;
-        }
 
         public void Insert(int insertPos, string text) {
             if (insertPos > _buffer.Length) insertPos = _buffer.Length;
@@ -49,5 +44,18 @@ namespace MEdit_wpf {
             _buffer.Insert(insertPos, text);
         }
 
+        public int GetOffset(int row, int col) {
+            var line = Lines.Find(x => x.LineNumber == row);
+            if (line == null) return _buffer.Length;
+
+            return line.Offset + col;
+        }
+
+        public string GetText(int startPos, int endPos) {
+            if (startPos == endPos) return "";
+            var length = Math.Abs(startPos - endPos);
+            if (startPos < endPos) return this.Text.Substring(startPos, length);
+            else return this.Text.Substring(endPos, length);
+        }
     }
 }

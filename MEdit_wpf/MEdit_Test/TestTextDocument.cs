@@ -31,5 +31,15 @@ namespace MEdit_Test {
             Assert.That(offset, Is.EqualTo(28));
             Assert.That(document.Text[offset], Is.EqualTo('s'));
         }
+
+        [TestCase(0, 0, "", TestName = "Empty")]
+        [TestCase(0, 3, "the", TestName = "RangeForward")]
+        [TestCase(14, 10, "line", TestName = "RangeBackward")]
+        public void TestGetText(int start, int end, string expected) {
+            var text = "the first line";
+            var document = new TextDocument(text);
+            var segment = document.GetText(start, end);
+            Assert.That(segment, Is.EqualTo(expected));
+        }
     }
 }
