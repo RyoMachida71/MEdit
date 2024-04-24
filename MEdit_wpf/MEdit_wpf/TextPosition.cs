@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Data.Common;
-using System.Windows.Shapes;
 
 namespace MEdit_wpf {
     public struct TextPosition : IComparable<TextPosition>, IEquatable<TextPosition> {
         public TextPosition(int row, int column)
         {
+            if (row < 0 || column < 0) {
+                throw new ArgumentException("row or column should be larger than or equal to 0");
+            }
             Row = row;
             Column = column;
         }

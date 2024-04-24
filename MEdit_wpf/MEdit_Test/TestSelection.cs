@@ -6,9 +6,9 @@ namespace MEdit_Test {
         [Test]
         public void TestSingleSelection() {
             var document = new TextDocument("selection test");
-            var sel = new SingleSelection(5, 10, document);
-            Assert.That(sel.StartPosition, Is.EqualTo(5));
-            Assert.That(sel.EndPosition, Is.EqualTo(10));
+            var startPos = new TextPosition(0, 5);
+            var endPos = new TextPosition(0, 10);
+            var sel = new SingleSelection(startPos, endPos, document);
             Assert.That(sel.SelectedText, Is.EqualTo("tion "));
             Assert.That(sel.HasSelection, Is.True);
         }
@@ -16,9 +16,8 @@ namespace MEdit_Test {
         [Test]
         public void TestEmptySelection() {
             var document = new TextDocument("selection test");
-            var sel = new SingleSelection(5, 5, document);
-            Assert.That(sel.StartPosition, Is.EqualTo(5));
-            Assert.That(sel.EndPosition, Is.EqualTo(5));
+            var pos = new TextPosition(5, 5);
+            var sel = new SingleSelection(pos, pos, document);
             Assert.That(sel.SelectedText, Is.EqualTo(""));
             Assert.That(sel.HasSelection, Is.False);
         }

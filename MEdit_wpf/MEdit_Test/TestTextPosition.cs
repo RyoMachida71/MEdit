@@ -3,6 +3,11 @@
 namespace MEdit_Test {
     public class TestTextPosition {
 
+        [Test]
+        public void TestIllegalArgument() {
+            Assert.Throws<ArgumentException>(() => new TextPosition(-1, -1));
+        }
+
         [TestCase(0, 0, 0, 0, true, TestName = "Equal")]
         [TestCase(0, 0, 1, 1, false, TestName = "NotEqual")]
         public void TestTextPositionEquality(int row1, int col1, int row2, int col2, bool expected) {

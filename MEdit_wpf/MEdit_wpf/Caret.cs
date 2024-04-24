@@ -14,7 +14,7 @@ namespace MEdit_wpf {
             Position = new TextPosition(0, 0);
             _document = document;
             _showCaret = showCaret;
-            Selection = new SingleSelection(0, 0, document);
+            Selection = new SingleSelection(Position, Position, document);
         }
 
         public TextPosition Position { get; set; }
@@ -95,8 +95,9 @@ namespace MEdit_wpf {
 
         private void MoveCharLeftExtendingSelection() {
             // todo: implement
+            var oldPos = this.Position;
             MoveCharLeft();
-
+            var selection = new SingleSelection(oldPos, this.Position, _document);
         }
 
         private void MoveCharRight() {
