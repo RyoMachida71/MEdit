@@ -28,7 +28,7 @@ namespace MEdit_wpf {
                                                 , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                                 , null);
                 visualLine.Draw(dc, new Point(0, _lineYPos), InvertAxes.None);
-                _lineYPos += visualLine.Height;
+                _lineYPos += visualLine.TextHeight;
 
                 _visualLines.Add(visualLine);
             }
@@ -40,7 +40,7 @@ namespace MEdit_wpf {
 
             var textLine = _visualLines[row];
             var xPos = textLine.GetDistanceFromCharacterHit(new CharacterHit(col, 0));
-            var yPos = row * textLine.Height;
+            var yPos = row * textLine.TextHeight;
             return new Point(xPos, yPos);
         }
     }

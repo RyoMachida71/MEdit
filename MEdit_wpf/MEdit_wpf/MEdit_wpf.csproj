@@ -89,6 +89,7 @@
       <DependentUpon>TextArea.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextDocument.cs" />
+    <Compile Include="TextPosition.cs" />
     <Compile Include="VisualText.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

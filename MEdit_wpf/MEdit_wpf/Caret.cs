@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MEdit_wpf.Selection;
+using System;
 
 namespace MEdit_wpf {
     public class Caret {
@@ -10,31 +11,29 @@ namespace MEdit_wpf {
         private Action _showCaret;
 
         public Caret(TextDocument document, Action showCaret) {
-            Row = Column = 0;
+            Position = new TextPosition(0, 0);
             _document = document;
             _showCaret = showCaret;
+            Selection = new SingleSelection(0, 0, document);
         }
 
-        public int Row { get; set; }
+        public TextPosition Position { get; set; }
 
-        public int Column { get; set; }
-
-        public int Offset =>_document.GetOffset(Row, Column);
+        public ISelection Selection { get; private set; }
 
         public void UpdatePos(string input) {
+            var row = this.Position.Row;
+            var col = this.Position.Column;
             if (input == Eol) {
-                ++this.Row;
-                this.Column = 0;
+                ++row;
+                col = 0;
             } else {
-                this.Column += input.Length;
+                col += input.Length;
             }
+            this.Position = new TextPosition(row, col);
         }
 
-        public void Test(CaretMovementType type) {
-
-        }
-
-        public void OnMove(CaretMovementType movement) {
+        public void Move(CaretMovementType movement) {
             if (_document.Lines.Count == 0) return;
 
             switch (movement) {
@@ -43,6 +42,9 @@ namespace MEdit_wpf {
                 case CaretMovementType.Backspace:
                     break;
                 case CaretMovementType.CharLeft:
+                    MoveCharLeft();
+                    break;
+                case CaretMovementType.CharLeftExtendingSelection:
                     MoveCharLeft();
                     break;
                 case CaretMovementType.CharRight:
@@ -79,51 +81,59 @@ namespace MEdit_wpf {
         }
 
         private void MoveCharLeft() {
-            if (this.Column - 1 >= 0) {
-                --this.Column;
+            if (this.Position.Column - 1 >= 0) {
+                this.Position = new TextPosition(this.Position.Row, this.Position.Column - 1);
                 return; 
             }
-            var rowAfterMove = this.Row - 1;
+            var rowAfterMove = this.Position.Row - 1;
             if (rowAfterMove >= 0) {
-                this.Row = rowAfterMove;
-                this.Column = _document.Lines[rowAfterMove].Text.Length - Eol.Length;
+                var newRow = rowAfterMove;
+                var newCol = _document.Lines[rowAfterMove].Text.Length - Eol.Length;
+                this.Position = new TextPosition(newRow, newCol);
             }
         }
 
+        private void MoveCharLeftExtendingSelection() {
+            // todo: implement
+            MoveCharLeft();
+
+        }
+
         private void MoveCharRight() {
-            var colAfterMove = this.Column + 1;
-            var currentLine = _document.Lines[this.Row];
+            var colAfterMove = this.Position.Column + 1;
+            var currentLine = _document.Lines[this.Position.Row];
             if (colAfterMove < currentLine.Text.Length - 1) {
-                this.Column = colAfterMove;
+                this.Position = new TextPosition(this.Position.Row, colAfterMove);
                 return;
             }
-            var rowAfterMove = this.Row + 1;
+            var rowAfterMove = this.Position.Row + 1;
             if (rowAfterMove <= _document.Lines.Count - 1) {
-                this.Row = rowAfterMove;
-                this.Column = 0;
+                this.Position = new TextPosition(rowAfterMove, 0);
             }
         }
 
         private void MoveLineUp() {
-            var rowAfterMove = this.Row - 1;
+            var rowAfterMove = this.Position.Row - 1;
             if (rowAfterMove < 0) return;
 
-            this.Row = rowAfterMove;
             var upLine = _document.Lines[rowAfterMove];
-            if (this.Column > upLine.Text.Length - Eol.Length) {
-                this.Column = upLine.Text.Length - Eol.Length;
+            var col = this.Position.Column;
+            if (this.Position.Column > upLine.Text.Length - Eol.Length) {
+                col = upLine.Text.Length - Eol.Length;
             }
+            this.Position = new TextPosition(rowAfterMove, col);
         }
 
         private void MoveLineDown() {
-            var rowAfterMove = this.Row + 1;
+            var rowAfterMove = this.Position.Row + 1;
             if (rowAfterMove > _document.Lines.Count - 1) return;
 
-            this.Row = rowAfterMove;
             var downLine = _document.Lines[rowAfterMove];
-            if (this.Column > downLine.Text.Length - Eol.Length) {
-                this.Column = downLine.Text.Length - Eol.Length;
+            var col = this.Position.Column;
+            if (this.Position.Column > downLine.Text.Length - Eol.Length) {
+                col = downLine.Text.Length - Eol.Length;
             }
+            this.Position = new TextPosition(rowAfterMove, col);
         }
     }
 }

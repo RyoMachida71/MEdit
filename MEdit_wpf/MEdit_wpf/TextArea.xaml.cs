@@ -31,7 +31,7 @@ namespace MEdit_wpf {
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
-            _document.Insert(_caret.Offset, input);
+            _document.Insert(_caret.Position.Row, _caret.Position.Column, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }
@@ -58,7 +58,7 @@ namespace MEdit_wpf {
         }
 
         private void RenderCaret() {
-            _caretLayer.Render(_visualText.GetPhisicalPositionByLogicalOne(_caret.Row, _caret.Column));
+            _caretLayer.Render(_visualText.GetPhisicalPositionByLogicalOne(_caret.Position.Row, _caret.Position.Column));
         }
     }
 }

@@ -7,8 +7,8 @@ namespace MEdit_Test {
         [Test]
         public void TestInitCaret() {
             var caret = new Caret(new TextDocument(), EmptyAction);
-            Assert.That(caret.Row, Is.EqualTo(0));
-            Assert.That(caret.Column, Is.EqualTo(0));
+            Assert.That(caret.Position.Row, Is.EqualTo(0));
+            Assert.That(caret.Position.Column, Is.EqualTo(0));
         }
 
         [TestCase(CaretMovementType.CharLeft, 0, 0, 0, 0, TestName = "TopLeft")]
@@ -21,22 +21,20 @@ namespace MEdit_Test {
         [TestCase(CaretMovementType.LineDown, 1, 1, 2, 1, TestName = "MoveLineDown")]
         public void TestMoveCaret(CaretMovementType type, int row, int column, int expectedRow, int expectedColumn) {
             var caret = new Caret(new TextDocument("test\r\ntest\r\ntest"), EmptyAction);
-            caret.Row = row;
-            caret.Column = column;
-            caret.OnMove(type);
-            Assert.That(caret.Row, Is.EqualTo(expectedRow));
-            Assert.That(caret.Column, Is.EqualTo(expectedColumn));
+            caret.Position = new TextPosition(row, column);
+            caret.Move(type);
+            Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
+            Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
         }
 
         [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
         [TestCase("abc", 0, 5, TestName = "OrdinalInput")]
         public void TestCaretPositionUpdateByInput(string input, int expectedRow, int expectedColumn) {
             var caret = new Caret(new TextDocument("test"), EmptyAction);
-            caret.Row = 0;
-            caret.Column = 2;
+            caret.Position = new TextPosition(0, 2);
             caret.UpdatePos(input);
-            Assert.That(caret.Row, Is.EqualTo(expectedRow));
-            Assert.That(caret.Column, Is.EqualTo(expectedColumn));
+            Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
+            Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
         }
     }
 }

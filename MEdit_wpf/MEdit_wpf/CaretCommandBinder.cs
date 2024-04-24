@@ -39,6 +39,7 @@ namespace MEdit_wpf {
             var shift = ModifierKeys.Shift;
 
             AddBinding(EditingCommands.MoveLeftByCharacter, none, Key.Left, OnMoveCaret(CaretMovementType.CharLeft));
+            AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaretExtendingSelection(CaretMovementType.CharLeftExtendingSelection));
             AddBinding(EditingCommands.MoveRightByCharacter, none, Key.Right, OnMoveCaret(CaretMovementType.CharRight));
             AddBinding(EditingCommands.MoveUpByLine, none, Key.Up, OnMoveCaret(CaretMovementType.LineUp));
             AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown));
@@ -46,7 +47,14 @@ namespace MEdit_wpf {
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {
             return (s, e) => {
-                _caret.OnMove(type);
+                _caret.Move(type);
+            };
+        }
+
+        private static ExecutedRoutedEventHandler OnMoveCaretExtendingSelection(CaretMovementType type) {
+            return (s, e) => {
+                _caret.Move(type);
+                
             };
         }
     }

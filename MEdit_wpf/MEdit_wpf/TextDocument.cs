@@ -38,10 +38,11 @@ namespace MEdit_wpf {
         }
 
 
-        public void Insert(int insertPos, string text) {
-            if (insertPos > _buffer.Length) insertPos = _buffer.Length;
-            if (insertPos < 0) insertPos = 0;
-            _buffer.Insert(insertPos, text);
+        public void Insert(int insertPosRow, int insertPosCol, string text) {
+            var offset = this.GetOffset(insertPosRow, insertPosCol);
+            if (offset > _buffer.Length) offset = _buffer.Length;
+            if (offset < 0) offset = 0;
+            _buffer.Insert(offset, text);
         }
 
         public int GetOffset(int row, int col) {

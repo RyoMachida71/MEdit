@@ -12,5 +12,15 @@ namespace MEdit_Test {
             Assert.That(sel.SelectedText, Is.EqualTo("tion "));
             Assert.That(sel.HasSelection, Is.True);
         }
+
+        [Test]
+        public void TestEmptySelection() {
+            var document = new TextDocument("selection test");
+            var sel = new SingleSelection(5, 5, document);
+            Assert.That(sel.StartPosition, Is.EqualTo(5));
+            Assert.That(sel.EndPosition, Is.EqualTo(5));
+            Assert.That(sel.SelectedText, Is.EqualTo(""));
+            Assert.That(sel.HasSelection, Is.False);
+        }
     }
 }

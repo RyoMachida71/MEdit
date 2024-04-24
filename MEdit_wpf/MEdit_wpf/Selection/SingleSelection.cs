@@ -1,9 +1,8 @@
-﻿using MEdit_wpf;
-
+﻿
 namespace MEdit_wpf.Selection {
     public class SingleSelection : ISelection {
         private ITextDocument _document;
-        public SingleSelection(int start, int end, TextDocument document)
+        public SingleSelection(int start, int end, ITextDocument document)
         {
             StartPosition = start;
             EndPosition = end;

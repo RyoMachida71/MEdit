@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Immutable;
 
 namespace MEdit_wpf {
-    interface ITextDocument {
+    public interface ITextDocument {
         string Text { get; set; }
         ImmutableList<DocumentLine> Lines { get; }
 
-        void Insert(int insertPos, string text);
+        void Insert(int insertPosRow, int insertPosCol, string text);
 
         int GetOffset(int row, int col);
 

@@ -6,14 +6,14 @@ namespace MEdit_Test {
         [Test]
         public void TestPrependText() {
             var document = new TextDocument();
-            document.Insert(0, "test");
+            document.Insert(0, 0, "test");
             Assert.That(document.Text, Is.EqualTo("test"));
         }
 
         [Test]
         public void TestAppendText() {
             var document = new TextDocument("test");
-            document.Insert(4, "test");
+            document.Insert(0, 4, "test");
             Assert.That(document.Text, Is.EqualTo("testtest"));
         }
 

@@ -3,6 +3,7 @@ namespace MEdit_wpf {
     public enum CaretMovementType {
         None,
         CharLeft,
+        CharLeftExtendingSelection,
         CharRight,
         Backspace,
         WordLeft,
