@@ -2,6 +2,7 @@
 
 namespace MEdit_wpf {
     public struct TextPosition : IComparable<TextPosition>, IEquatable<TextPosition> {
+        private static readonly TextPosition _empty = new TextPosition(0, 0);
         public TextPosition(int row, int column)
         {
             if (row < 0 || column < 0) {
@@ -10,6 +11,8 @@ namespace MEdit_wpf {
             Row = row;
             Column = column;
         }
+
+        public static TextPosition Empty => _empty;
 
         public int Row { get; private set; }
         public int Column { get; private set; }

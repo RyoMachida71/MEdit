@@ -5,21 +5,21 @@ namespace MEdit_Test {
     public class TestSelection {
         [Test]
         public void TestSingleSelection() {
-            var document = new TextDocument("selection test");
-            var startPos = new TextPosition(0, 5);
-            var endPos = new TextPosition(0, 10);
-            var sel = new SingleSelection(startPos, endPos, document);
+            var sel = new SingleSelection(new TextDocument("selection test"));
+            sel.StartOrExtend(new TextPosition(0, 5), new TextPosition(0, 10));
+            Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 5)));
+            Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 10)));
             Assert.That(sel.SelectedText, Is.EqualTo("tion "));
-            Assert.That(sel.HasSelection, Is.True);
-        }
 
-        [Test]
-        public void TestEmptySelection() {
-            var document = new TextDocument("selection test");
-            var pos = new TextPosition(5, 5);
-            var sel = new SingleSelection(pos, pos, document);
+            sel.StartOrExtend(TextPosition.Empty, new TextPosition(0, 11));
+            Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 5)));
+            Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 11)));
+            Assert.That(sel.SelectedText, Is.EqualTo("tion t"));
+
+            sel.Unselect();
+            Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 11)));
+            Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 11)));
             Assert.That(sel.SelectedText, Is.EqualTo(""));
-            Assert.That(sel.HasSelection, Is.False);
         }
     }
 }

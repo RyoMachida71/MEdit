@@ -58,7 +58,7 @@ namespace MEdit_wpf {
         }
 
         private void RenderCaret() {
-            _caretLayer.Render(_visualText.GetPhisicalPositionByLogicalOne(_caret.Position.Row, _caret.Position.Column));
+            _caretLayer.Render(_visualText.GetCaretScreenPosition(_caret.Position), _visualText.GetSelectionScreenRects(_caret.Selection, _document));
         }
     }
 }
