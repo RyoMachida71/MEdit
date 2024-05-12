@@ -45,10 +45,13 @@ namespace MEdit_wpf {
                     MoveCharLeft();
                     break;
                 case CaretMovementType.CharLeftExtendingSelection:
-                    MoveCharLeftSeleccting();
+                    MoveCharLeftSelecting();
                     break;
                 case CaretMovementType.CharRight:
                     MoveCharRight();
+                    break;
+                case CaretMovementType.CharRightExtendingSelection:
+                    MoveCharRightSelecting();
                     break;
                 case CaretMovementType.LineUp:
                     MoveLineUp();
@@ -93,7 +96,7 @@ namespace MEdit_wpf {
             }
         }
 
-        private void MoveCharLeftSeleccting() {
+        private void MoveCharLeftSelecting() {
             var start = this.Position;
             MoveCharLeft();
             Selection.StartOrExtend(start, this.Position);
@@ -110,6 +113,13 @@ namespace MEdit_wpf {
             if (rowAfterMove <= _document.Lines.Count - 1) {
                 this.Position = new TextPosition(rowAfterMove, 0);
             }
+        }
+
+        private void MoveCharRightSelecting()
+        {
+            var start = this.Position;
+            MoveCharRight();
+            Selection.StartOrExtend(start, this.Position);
         }
 
         private void MoveLineUp() {

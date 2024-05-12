@@ -5,6 +5,7 @@ namespace MEdit_wpf {
         CharLeft,
         CharLeftExtendingSelection,
         CharRight,
+        CharRightExtendingSelection,
         Backspace,
         WordLeft,
         WordRight,

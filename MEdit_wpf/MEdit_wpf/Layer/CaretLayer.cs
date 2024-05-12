@@ -12,7 +12,7 @@ namespace MEdit_wpf.Layer {
         private const double CaretWidth = 2;
         private double CaretHeight = 12;
         private Brush ForeGround = Brushes.Black;
-        private Brush SelectionBrush = new SolidColorBrush(Color.FromArgb(128, 0, 0, 255));
+        private Brush SelectionBrush = new SolidColorBrush(Color.FromArgb(64, 0, 0, 255));
 
         public CaretLayer()
         {
@@ -28,7 +28,6 @@ namespace MEdit_wpf.Layer {
             base.OnRender(dc);
             dc.DrawRectangle(ForeGround, null, new Rect(_renderPos.X, _renderPos.Y, CaretWidth, CaretHeight));
 
-            var geometry = new RectangleGeometry();
             foreach (var rect in _selectionRects)
             {
                 dc.DrawRectangle(SelectionBrush, null, rect);

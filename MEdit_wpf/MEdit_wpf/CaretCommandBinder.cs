@@ -41,6 +41,7 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.MoveLeftByCharacter, none, Key.Left, OnMoveCaret(CaretMovementType.CharLeft));
             AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaretExtendingSelection(CaretMovementType.CharLeftExtendingSelection));
             AddBinding(EditingCommands.MoveRightByCharacter, none, Key.Right, OnMoveCaret(CaretMovementType.CharRight));
+            AddBinding(EditingCommands.SelectRightByCharacter, shift, Key.Right, OnMoveCaretExtendingSelection(CaretMovementType.CharRightExtendingSelection));
             AddBinding(EditingCommands.MoveUpByLine, none, Key.Up, OnMoveCaret(CaretMovementType.LineUp));
             AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown));
         }
