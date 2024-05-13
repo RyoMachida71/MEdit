@@ -4,8 +4,6 @@ using System;
 namespace MEdit_wpf {
     public class Caret {
 
-        private const string Eol = "\r\n";
-
         private ITextArea _textArea;
 
         private Action _showCaret;
@@ -24,7 +22,7 @@ namespace MEdit_wpf {
         public void UpdatePos(string input) {
             var row = this.Position.Row;
             var col = this.Position.Column;
-            if (input == Eol) {
+            if (input == TextDocument.EndOfLine) {
                 ++row;
                 col = 0;
             } else {
@@ -91,7 +89,7 @@ namespace MEdit_wpf {
             var rowAfterMove = this.Position.Row - 1;
             if (rowAfterMove >= 0) {
                 var newRow = rowAfterMove;
-                var newCol = _textArea.Document.Lines[rowAfterMove].Text.Length - Eol.Length;
+                var newCol = _textArea.Document.Lines[rowAfterMove].Text.Length - TextDocument.EndOfLine.Length;
                 this.Position = new TextPosition(newRow, newCol);
             }
         }
@@ -128,8 +126,8 @@ namespace MEdit_wpf {
 
             var upLine = _textArea.Document.Lines[rowAfterMove];
             var col = this.Position.Column;
-            if (this.Position.Column > upLine.Text.Length - Eol.Length) {
-                col = upLine.Text.Length - Eol.Length;
+            if (this.Position.Column > upLine.Text.Length - TextDocument.EndOfLine.Length) {
+                col = upLine.Text.Length - TextDocument.EndOfLine.Length;
             }
             this.Position = new TextPosition(rowAfterMove, col);
         }
@@ -140,8 +138,8 @@ namespace MEdit_wpf {
 
             var downLine = _textArea.Document.Lines[rowAfterMove];
             var col = this.Position.Column;
-            if (this.Position.Column > downLine.Text.Length - Eol.Length) {
-                col = downLine.Text.Length - Eol.Length;
+            if (this.Position.Column > downLine.Text.Length - TextDocument.EndOfLine.Length) {
+                col = downLine.Text.Length - TextDocument.EndOfLine.Length;
             }
             this.Position = new TextPosition(rowAfterMove, col);
         }

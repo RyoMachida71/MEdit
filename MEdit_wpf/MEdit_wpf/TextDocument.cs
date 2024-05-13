@@ -7,6 +7,8 @@ using System.Text;
 namespace MEdit_wpf {
     public class TextDocument : ITextDocument {
 
+        public static readonly string EndOfLine = "\r\n";
+
         private List<DocumentLine> _lines = new List<DocumentLine>();
 
         private StringBuilder _buffer;
@@ -28,7 +30,7 @@ namespace MEdit_wpf {
                 int lineNumber = 0;
                 int offset = 0;
                 while (reader.Peek() > -1) {
-                    var line = reader.ReadLine() + "\r\n";
+                    var line = reader.ReadLine() + EndOfLine;
                     _lines.Add(new DocumentLine(lineNumber, offset, line));
                     ++lineNumber;
                     offset += line.Length;
