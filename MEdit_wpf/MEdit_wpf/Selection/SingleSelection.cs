@@ -1,21 +1,23 @@
 ﻿
 namespace MEdit_wpf.Selection {
     public class SingleSelection : ISelection {
-        private ITextDocument _document;
-        public SingleSelection(ITextDocument document)
+
+        private ITextArea _textArea;
+
+        public SingleSelection(ITextArea textArea)
         {
             StartPosition = new TextPosition(0, 0);
             EndPosition = new TextPosition(0, 0);
-            _document = document;
+            _textArea = textArea;
         }
 
         public TextPosition StartPosition { get; private set; }
         public TextPosition EndPosition { get; private set; }
         public string SelectedText {
             get {
-                var startOffset = _document.GetOffset(StartPosition.Row, StartPosition.Column);
-                var endOffset = _document.GetOffset(EndPosition.Row, EndPosition.Column);
-                return _document.GetText(startOffset, endOffset);
+                var startOffset = _textArea.Document.GetOffset(StartPosition.Row, StartPosition.Column);
+                var endOffset = _textArea.Document.GetOffset(EndPosition.Row, EndPosition.Column);
+                return _textArea.Document.GetText(startOffset, endOffset);
             }
         }
         private bool HasSelection() => this.StartPosition != this.EndPosition;

@@ -8,7 +8,7 @@ namespace MEdit_wpf {
     /// <summary>
     /// TextArea.xaml の相互作用ロジック
     /// </summary>
-    public partial class TextArea : Control {
+    public partial class TextArea : Control, ITextArea {
 
         private TextDocument _document;
         private Caret _caret;
@@ -19,12 +19,14 @@ namespace MEdit_wpf {
             InitializeComponent();
             _document = new TextDocument();
             _visualText = new VisualText();
-            _caret = new Caret(_document, RenderCaret);
+            _caret = new Caret(this, RenderCaret);
             _caretLayer = new CaretLayer();
 
             AddVisualChild(_caretLayer);
             CaretCommandBinder.SetBinding(_caret, this.CommandBindings, this.InputBindings);
         }
+
+        public ITextDocument Document => _document; 
 
         protected override int VisualChildrenCount => 1;
 

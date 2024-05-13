@@ -1,4 +1,5 @@
 ﻿using MEdit_wpf;
+using Moq;
 
 namespace MEdit_Test {
     public class TestCaret {
@@ -6,7 +7,9 @@ namespace MEdit_Test {
 
         [Test]
         public void TestInitCaret() {
-            var caret = new Caret(new TextDocument(), EmptyAction);
+            var mock = new Mock<ITextArea>();
+            mock.SetupGet(x => x.Document).Returns(new TextDocument());
+            var caret = new Caret(mock.Object, EmptyAction);
             Assert.That(caret.Position.Row, Is.EqualTo(0));
             Assert.That(caret.Position.Column, Is.EqualTo(0));
         }
@@ -20,7 +23,10 @@ namespace MEdit_Test {
         [TestCase(CaretMovementType.LineDown, 2, 1, 2, 1, TestName = "BottomLineDown")]
         [TestCase(CaretMovementType.LineDown, 1, 1, 2, 1, TestName = "MoveLineDown")]
         public void TestMoveCaret(CaretMovementType type, int row, int column, int expectedRow, int expectedColumn) {
-            var caret = new Caret(new TextDocument("test\r\ntest\r\ntest"), EmptyAction);
+            var mock = new Mock<ITextArea>();
+            var doc = new TextDocument("test\r\ntest\r\ntest");
+            mock.SetupGet(x => x.Document).Returns(doc);
+            var caret = new Caret(mock.Object, EmptyAction);
             caret.Position = new TextPosition(row, column);
             caret.Move(type);
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
@@ -30,7 +36,10 @@ namespace MEdit_Test {
         [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
         [TestCase("abc", 0, 5, TestName = "OrdinalInput")]
         public void TestCaretPositionUpdateByInput(string input, int expectedRow, int expectedColumn) {
-            var caret = new Caret(new TextDocument("test"), EmptyAction);
+            var mock = new Mock<ITextArea>();
+            var doc = new TextDocument("test");
+            mock.SetupGet(x => x.Document).Returns(doc);
+            var caret = new Caret(mock.Object, EmptyAction);
             caret.Position = new TextPosition(0, 2);
             caret.UpdatePos(input);
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
