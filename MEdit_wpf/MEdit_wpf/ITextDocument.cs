@@ -5,6 +5,6 @@ namespace MEdit_wpf {
         string Text { get; set; }
         ImmutableList<DocumentLine> Lines { get; }
         void Insert(TextPosition position, TextInput input);
-        string GetText(int start, int end);
+        string GetText(TextPosition startPosition, TextPosition endPosition);
     }
 }

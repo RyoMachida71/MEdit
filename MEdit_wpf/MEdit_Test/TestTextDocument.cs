@@ -26,13 +26,13 @@ namespace MEdit_Test {
             Assert.That(document.Lines[1].Text, Is.EqualTo("This is the second line.\r\n"));
         }
 
-        [TestCase(0, 0, "", TestName = "Empty")]
-        [TestCase(0, 3, "the", TestName = "RangeForward")]
-        [TestCase(14, 10, "line", TestName = "RangeBackward")]
-        public void TestGetText(int start, int end, string expected) {
+        [TestCase(0, 0, 0, 0, "", TestName = "Empty")]
+        [TestCase(0, 0, 0, 3, "the", TestName = "RangeForward")]
+        [TestCase(0, 14, 0, 10, "line", TestName = "RangeBackward")]
+        public void TestGetText(int startRow, int startCol, int endRow, int endCol, string expected) {
             var text = "the first line";
             var document = new TextDocument(text);
-            var segment = document.GetText(start, end);
+            var segment = document.GetText(new TextPosition(startRow, startCol), new TextPosition(endRow, endCol));
             Assert.That(segment, Is.EqualTo(expected));
         }
     }

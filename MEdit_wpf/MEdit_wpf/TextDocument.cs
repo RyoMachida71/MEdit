@@ -55,11 +55,12 @@ namespace MEdit_wpf {
             return line.Offset + position.Column;
         }
 
-        public string GetText(int startPos, int endPos) {
+        public string GetText(TextPosition startPos, TextPosition endPos) {
             if (startPos == endPos) return "";
-            var length = Math.Abs(startPos - endPos);
-            if (startPos < endPos) return this.Text.Substring(startPos, length);
-            else return this.Text.Substring(endPos, length);
+            var startOffset = GetOffset(startPos);
+            var endOffset = GetOffset(endPos);
+            var length = Math.Abs(startOffset - endOffset);
+            return startPos < endPos ? this.Text.Substring(startOffset, length) : this.Text.Substring(endOffset, length);
         }
     }
 }
