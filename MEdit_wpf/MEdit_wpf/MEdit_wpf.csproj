@@ -90,6 +90,7 @@
       <DependentUpon>TextArea.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextDocument.cs" />
+    <Compile Include="TextInput.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="VisualText.cs" />
     <Page Include="MainWindow.xaml">

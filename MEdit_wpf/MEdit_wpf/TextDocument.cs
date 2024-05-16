@@ -40,18 +40,19 @@ namespace MEdit_wpf {
         }
 
 
-        public void Insert(int insertPosRow, int insertPosCol, string text) {
-            var offset = this.GetOffset(insertPosRow, insertPosCol);
+        public void Insert(TextPosition position, TextInput input) {
+            var offset = this.GetOffset(position);
             if (offset > _buffer.Length) offset = _buffer.Length;
             if (offset < 0) offset = 0;
-            _buffer.Insert(offset, text);
+
+            _buffer.Insert(offset, input.Value);
         }
 
-        public int GetOffset(int row, int col) {
-            var line = Lines.Find(x => x.LineNumber == row);
+        private int GetOffset(TextPosition position) {
+            var line = Lines.Find(x => x.LineNumber == position.Row);
             if (line == null) return _buffer.Length;
 
-            return line.Offset + col;
+            return line.Offset + position.Column;
         }
 
         public string GetText(int startPos, int endPos) {

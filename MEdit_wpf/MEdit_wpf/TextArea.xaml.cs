@@ -32,8 +32,8 @@ namespace MEdit_wpf {
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
-            string input = (e.Text == "\r" || e.Text == "\n") ? "\r\n" : e.Text;
-            _document.Insert(_caret.Position.Row, _caret.Position.Column, input);
+            var input = new TextInput(e.Text);
+            _document.Insert(_caret.Position, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }

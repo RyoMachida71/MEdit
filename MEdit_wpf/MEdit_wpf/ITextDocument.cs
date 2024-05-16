@@ -4,12 +4,7 @@ namespace MEdit_wpf {
     public interface ITextDocument {
         string Text { get; set; }
         ImmutableList<DocumentLine> Lines { get; }
-
-        void Insert(int insertPosRow, int insertPosCol, string text);
-
-        int GetOffset(int row, int col);
-
+        void Insert(TextPosition position, TextInput input);
         string GetText(int start, int end);
-
     }
 }

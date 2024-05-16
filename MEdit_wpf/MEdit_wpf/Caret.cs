@@ -19,10 +19,10 @@ namespace MEdit_wpf {
 
         public ISelection Selection { get; private set; }
 
-        public void UpdatePos(string input) {
+        public void UpdatePos(TextInput input) {
             var row = this.Position.Row;
             var col = this.Position.Column;
-            if (input == TextDocument.EndOfLine) {
+            if (input.Value == TextDocument.EndOfLine) {
                 ++row;
                 col = 0;
             } else {

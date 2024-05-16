@@ -6,14 +6,14 @@ namespace MEdit_Test {
         [Test]
         public void TestPrependText() {
             var document = new TextDocument();
-            document.Insert(0, 0, "test");
+            document.Insert(new TextPosition(0, 0), new TextInput("test"));
             Assert.That(document.Text, Is.EqualTo("test"));
         }
 
         [Test]
         public void TestAppendText() {
             var document = new TextDocument("test");
-            document.Insert(0, 4, "test");
+            document.Insert(new TextPosition(0, 4), new TextInput("test"));
             Assert.That(document.Text, Is.EqualTo("testtest"));
         }
 
@@ -22,14 +22,8 @@ namespace MEdit_Test {
             var text = "This is the first line.\r\nThis is the second line.\r\n";
             var document = new TextDocument(text);
             Assert.That(document.Lines, Has.Count.EqualTo(2));
-
-            var offset = document.GetOffset(0, 0);
-            Assert.That(offset, Is.EqualTo(0));
-            Assert.That(document.Text[offset], Is.EqualTo('T'));
-
-            offset = document.GetOffset(1, 3);
-            Assert.That(offset, Is.EqualTo(28));
-            Assert.That(document.Text[offset], Is.EqualTo('s'));
+            Assert.That(document.Lines[0].Text, Is.EqualTo("This is the first line.\r\n"));
+            Assert.That(document.Lines[1].Text, Is.EqualTo("This is the second line.\r\n"));
         }
 
         [TestCase(0, 0, "", TestName = "Empty")]

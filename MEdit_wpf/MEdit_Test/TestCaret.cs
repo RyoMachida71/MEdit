@@ -41,7 +41,7 @@ namespace MEdit_Test {
             mock.SetupGet(x => x.Document).Returns(doc);
             var caret = new Caret(mock.Object, EmptyAction);
             caret.Position = new TextPosition(0, 2);
-            caret.UpdatePos(input);
+            caret.UpdatePos(new TextInput(input));
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
         }
