@@ -113,8 +113,7 @@ namespace MEdit_wpf {
             }
         }
 
-        private void MoveCharRightSelecting()
-        {
+        private void MoveCharRightSelecting() {
             var start = this.Position;
             MoveCharRight();
             Selection.StartOrExtend(start, this.Position);
