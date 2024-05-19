@@ -41,21 +41,31 @@ namespace MEdit_wpf {
                     break;
                 case CaretMovementType.CharLeft:
                     MoveCharLeft();
+                    this.Selection.Unselect(this.Position);
                     break;
                 case CaretMovementType.CharLeftExtendingSelection:
                     MoveCharLeftSelecting();
                     break;
                 case CaretMovementType.CharRight:
                     MoveCharRight();
+                    this.Selection.Unselect(this.Position);
                     break;
                 case CaretMovementType.CharRightExtendingSelection:
                     MoveCharRightSelecting();
                     break;
                 case CaretMovementType.LineUp:
                     MoveLineUp();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.LineUpExtendingSelection:
+                    MoveLineUpSelecting();
                     break;
                 case CaretMovementType.LineDown:
                     MoveLineDown();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.LineDownExtendingSelection:
+                    MoveLineDownSelecting();
                     break;
                 case CaretMovementType.LineStart:
                     break;
@@ -131,6 +141,13 @@ namespace MEdit_wpf {
             this.Position = new TextPosition(rowAfterMove, col);
         }
 
+        private void MoveLineUpSelecting()
+        {
+            var start = this.Position;
+            MoveLineUp();
+            Selection.StartOrExtend(start, this.Position);
+        }
+
         private void MoveLineDown() {
             var rowAfterMove = this.Position.Row + 1;
             if (rowAfterMove > _textArea.Document.Lines.Count - 1) return;
@@ -141,6 +158,13 @@ namespace MEdit_wpf {
                 col = downLine.Text.Length - TextDocument.EndOfLine.Length;
             }
             this.Position = new TextPosition(rowAfterMove, col);
+        }
+
+        private void MoveLineDownSelecting()
+        {
+            var start = this.Position;
+            MoveLineDown();
+            Selection.StartOrExtend(start, this.Position);
         }
     }
 }

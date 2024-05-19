@@ -31,6 +31,7 @@ namespace MEdit_Test {
             caret.Move(type);
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
         }
 
         [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
@@ -44,6 +45,7 @@ namespace MEdit_Test {
             caret.UpdatePos(new TextInput(input));
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
         }
     }
 }

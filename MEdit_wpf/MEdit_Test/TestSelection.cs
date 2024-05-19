@@ -18,9 +18,10 @@ namespace MEdit_Test {
             Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 5)));
             Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 11)));
 
-            sel.Unselect();
-            Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 11)));
-            Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 11)));
+            sel.Unselect(new TextPosition(0, 12));
+            Assert.That(sel.StartPosition, Is.EqualTo(new TextPosition(0, 12)));
+            Assert.That(sel.EndPosition, Is.EqualTo(new TextPosition(0, 12)));
+            Assert.That(sel.StartPosition, Is.EqualTo(sel.EndPosition));
         }
     }
 }

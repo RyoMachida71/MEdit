@@ -4,6 +4,6 @@ namespace MEdit_wpf.Selection {
         TextPosition StartPosition { get; }
         TextPosition EndPosition { get; }
         void StartOrExtend(TextPosition start, TextPosition end);
-        void Unselect();
+        void Unselect(TextPosition newPosition);
     }
 }

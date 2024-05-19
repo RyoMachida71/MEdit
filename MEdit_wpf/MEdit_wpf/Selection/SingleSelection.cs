@@ -24,6 +24,6 @@ namespace MEdit_wpf.Selection {
             this.EndPosition = end;
         }
 
-        public void Unselect() => this.StartPosition = this.EndPosition;
+        public void Unselect(TextPosition newPosition) => this.StartPosition = this.EndPosition = newPosition;
     }
 }

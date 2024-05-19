@@ -39,23 +39,18 @@ namespace MEdit_wpf {
             var shift = ModifierKeys.Shift;
 
             AddBinding(EditingCommands.MoveLeftByCharacter, none, Key.Left, OnMoveCaret(CaretMovementType.CharLeft));
-            AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaretExtendingSelection(CaretMovementType.CharLeftExtendingSelection));
+            AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaret(CaretMovementType.CharLeftExtendingSelection));
             AddBinding(EditingCommands.MoveRightByCharacter, none, Key.Right, OnMoveCaret(CaretMovementType.CharRight));
-            AddBinding(EditingCommands.SelectRightByCharacter, shift, Key.Right, OnMoveCaretExtendingSelection(CaretMovementType.CharRightExtendingSelection));
+            AddBinding(EditingCommands.SelectRightByCharacter, shift, Key.Right, OnMoveCaret(CaretMovementType.CharRightExtendingSelection));
             AddBinding(EditingCommands.MoveUpByLine, none, Key.Up, OnMoveCaret(CaretMovementType.LineUp));
+            AddBinding(EditingCommands.SelectUpByLine, shift, Key.Up, OnMoveCaret(CaretMovementType.LineUpExtendingSelection));
             AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown));
+            AddBinding(EditingCommands.SelectDownByLine, shift, Key.Down, OnMoveCaret(CaretMovementType.LineDownExtendingSelection));
         }
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {
             return (s, e) => {
                 _caret.Move(type);
-            };
-        }
-
-        private static ExecutedRoutedEventHandler OnMoveCaretExtendingSelection(CaretMovementType type) {
-            return (s, e) => {
-                _caret.Move(type);
-                
             };
         }
     }
