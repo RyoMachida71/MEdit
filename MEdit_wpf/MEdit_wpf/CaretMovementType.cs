@@ -16,7 +16,9 @@ namespace MEdit_wpf {
         PageUp,
         PageDown,
         LineStart,
+        LineStartExtendingSelection,
         LineEnd,
+        LineEndExtendingSelection,
         DocumentStart,
         DocumentEnd
     }

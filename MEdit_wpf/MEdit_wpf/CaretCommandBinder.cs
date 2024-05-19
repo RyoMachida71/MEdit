@@ -46,6 +46,11 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.SelectUpByLine, shift, Key.Up, OnMoveCaret(CaretMovementType.LineUpExtendingSelection));
             AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown));
             AddBinding(EditingCommands.SelectDownByLine, shift, Key.Down, OnMoveCaret(CaretMovementType.LineDownExtendingSelection));
+
+            AddBinding(EditingCommands.MoveToLineStart, none, Key.Home, OnMoveCaret(CaretMovementType.LineStart));
+            AddBinding(EditingCommands.SelectToLineStart, shift, Key.Home, OnMoveCaret(CaretMovementType.LineStartExtendingSelection));
+            AddBinding(EditingCommands.MoveToLineEnd, none, Key.End, OnMoveCaret(CaretMovementType.LineEnd));
+            AddBinding(EditingCommands.SelectToLineEnd, shift, Key.End, OnMoveCaret(CaretMovementType.LineEndExtendingSelection));
         }
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {

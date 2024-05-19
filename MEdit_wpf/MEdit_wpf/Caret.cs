@@ -68,8 +68,18 @@ namespace MEdit_wpf {
                     MoveLineDownSelecting();
                     break;
                 case CaretMovementType.LineStart:
+                    MoveToLineStart();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.LineStartExtendingSelection:
+                    MoveToLineStartSelecting();
                     break;
                 case CaretMovementType.LineEnd:
+                    MoveToLineEnd();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.LineEndExtendingSelection:
+                    MoveToLineEndSelecting();
                     break;
                 case CaretMovementType.WordLeft:
                     break;
@@ -164,6 +174,33 @@ namespace MEdit_wpf {
         {
             var start = this.Position;
             MoveLineDown();
+            Selection.StartOrExtend(start, this.Position);
+        }
+
+        private void MoveToLineStart()
+        {
+            if (_textArea.Document.Lines.Count == 0) return;
+            this.Position = new TextPosition(this.Position.Row, 0);
+        }
+
+        private void MoveToLineStartSelecting()
+        {
+            var start = this.Position;
+            MoveToLineStart();
+            Selection.StartOrExtend(start, this.Position);
+        }
+
+        private void MoveToLineEnd()
+        {
+            if (_textArea.Document.Lines.Count == 0) return;
+            var line = _textArea.Document.Lines[this.Position.Row];
+            this.Position = new TextPosition(this.Position.Row, line.Text.Length - TextDocument.EndOfLine.Length);
+        }
+
+        private void MoveToLineEndSelecting()
+        {
+            var start = this.Position;
+            MoveToLineEnd();
             Selection.StartOrExtend(start, this.Position);
         }
     }
