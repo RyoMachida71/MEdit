@@ -90,8 +90,18 @@ namespace MEdit_wpf {
                 case CaretMovementType.PageDown:
                     break;
                 case CaretMovementType.DocumentStart:
+                    MoveToDocumentStart();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.DocumentStartSelection:
+                    MoveToDocumentStartSelecting();
                     break;
                 case CaretMovementType.DocumentEnd:
+                    MoveToDocumentEnd();
+                    this.Selection.Unselect(this.Position);
+                    break;
+                case CaretMovementType.DocumentEndSelection:
+                    MoveToDocumentEndSelecting();
                     break;
                 default:
                     break;
@@ -151,8 +161,7 @@ namespace MEdit_wpf {
             this.Position = new TextPosition(rowAfterMove, col);
         }
 
-        private void MoveLineUpSelecting()
-        {
+        private void MoveLineUpSelecting() {
             var start = this.Position;
             MoveLineUp();
             Selection.StartOrExtend(start, this.Position);
@@ -170,37 +179,55 @@ namespace MEdit_wpf {
             this.Position = new TextPosition(rowAfterMove, col);
         }
 
-        private void MoveLineDownSelecting()
-        {
+        private void MoveLineDownSelecting() {
             var start = this.Position;
             MoveLineDown();
             Selection.StartOrExtend(start, this.Position);
         }
 
-        private void MoveToLineStart()
-        {
+        private void MoveToLineStart() {
             if (_textArea.Document.Lines.Count == 0) return;
             this.Position = new TextPosition(this.Position.Row, 0);
         }
 
-        private void MoveToLineStartSelecting()
-        {
+        private void MoveToLineStartSelecting() {
             var start = this.Position;
             MoveToLineStart();
             Selection.StartOrExtend(start, this.Position);
         }
 
-        private void MoveToLineEnd()
-        {
+        private void MoveToLineEnd() {
             if (_textArea.Document.Lines.Count == 0) return;
             var line = _textArea.Document.Lines[this.Position.Row];
             this.Position = new TextPosition(this.Position.Row, line.Text.Length - TextDocument.EndOfLine.Length);
         }
 
-        private void MoveToLineEndSelecting()
-        {
+        private void MoveToLineEndSelecting() {
             var start = this.Position;
             MoveToLineEnd();
+            Selection.StartOrExtend(start, this.Position);
+        }
+
+
+        private void MoveToDocumentStart() => this.Position = TextPosition.Empty;
+
+        private void MoveToDocumentStartSelecting() {
+            var start = this.Position;
+            MoveToDocumentStart();
+            Selection.StartOrExtend(start, this.Position);
+        }
+
+        private void MoveToDocumentEnd() {
+            if (_textArea.Document.Lines.Count == 0) return;
+
+            var lastLine = _textArea.Document.Lines[_textArea.Document.Lines.Count - 1];
+            var col = lastLine.Text.Length - TextDocument.EndOfLine.Length;
+            this.Position = new TextPosition(lastLine.LineNumber, col);
+        }
+
+        private void MoveToDocumentEndSelecting() {
+            var start = this.Position;
+            MoveToDocumentEnd();
             Selection.StartOrExtend(start, this.Position);
         }
     }

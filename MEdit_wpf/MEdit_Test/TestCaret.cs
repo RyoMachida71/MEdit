@@ -26,6 +26,10 @@ namespace MEdit_Test {
         [TestCase(CaretMovementType.LineStart, 0, 0, 0, 0, TestName = "LineStartAtLineStart")]
         [TestCase(CaretMovementType.LineEnd, 0, 3, 0, 4, TestName = "LineEnd")]
         [TestCase(CaretMovementType.LineEnd, 0, 4, 0, 4, TestName = "LineStartAtLineEnd")]
+        [TestCase(CaretMovementType.DocumentStart, 1, 4, 0, 0, TestName = "DocumentStart")]
+        [TestCase(CaretMovementType.DocumentStart, 0, 0, 0, 0, TestName = "DocumentStartAtDocumentStart")]
+        [TestCase(CaretMovementType.DocumentEnd, 1, 4, 2, 4, TestName = "DocumentEnd")]
+        [TestCase(CaretMovementType.DocumentStart, 2, 4, 2, 4, TestName = "DocumentEndAtDocumentEnd")]
         public void TestMoveCaret(CaretMovementType type, int row, int column, int expectedRow, int expectedColumn) {
             var mock = new Mock<ITextArea>();
             var doc = new TextDocument("test\r\ntest\r\ntest");

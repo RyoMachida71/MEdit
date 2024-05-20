@@ -20,6 +20,8 @@ namespace MEdit_wpf {
         LineEnd,
         LineEndExtendingSelection,
         DocumentStart,
-        DocumentEnd
+        DocumentStartSelection,
+        DocumentEnd,
+        DocumentEndSelection,
     }
 }
