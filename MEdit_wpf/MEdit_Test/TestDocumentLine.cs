@@ -10,6 +10,7 @@ namespace MEdit_Test {
             Assert.That(line.LineNumber, Is.EqualTo(2));
             Assert.That(line.Offset, Is.EqualTo(15));
             Assert.That(line.Text, Is.EqualTo("testtesttest"));
+            Assert.That(line.Length, Is.EqualTo(12));
         }
     }
 }

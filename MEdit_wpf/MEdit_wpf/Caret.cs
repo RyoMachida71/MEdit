@@ -1,5 +1,6 @@
 ﻿using MEdit_wpf.Selection;
 using System;
+using System.Linq;
 
 namespace MEdit_wpf {
     public class Caret {
@@ -12,7 +13,7 @@ namespace MEdit_wpf {
             Position = new TextPosition(0, 0);
             _textArea = textArea;
             _showCaret = showCaret;
-            Selection = new SingleSelection(textArea);
+            Selection = new SingleSelection();
         }
 
         public TextPosition Position { get; set; }
@@ -119,7 +120,7 @@ namespace MEdit_wpf {
             var rowAfterMove = this.Position.Row - 1;
             if (rowAfterMove >= 0) {
                 var newRow = rowAfterMove;
-                var newCol = _textArea.Document.Lines[rowAfterMove].Text.Length - TextDocument.EndOfLine.Length;
+                var newCol = _textArea.Document.Lines[rowAfterMove].Length;
                 this.Position = new TextPosition(newRow, newCol);
             }
         }
@@ -131,14 +132,15 @@ namespace MEdit_wpf {
         }
 
         private void MoveCharRight() {
+            var lines = _textArea.Document.Lines;
             var colAfterMove = this.Position.Column + 1;
-            var currentLine = _textArea.Document.Lines[this.Position.Row];
-            if (colAfterMove < currentLine.Text.Length - 1) {
+            var currentLine = lines[this.Position.Row];
+            if (colAfterMove <= currentLine.Text.Length) {
                 this.Position = new TextPosition(this.Position.Row, colAfterMove);
                 return;
             }
             var rowAfterMove = this.Position.Row + 1;
-            if (rowAfterMove <= _textArea.Document.Lines.Count - 1) {
+            if (rowAfterMove <= lines.Count - 1) {
                 this.Position = new TextPosition(rowAfterMove, 0);
             }
         }
@@ -155,8 +157,8 @@ namespace MEdit_wpf {
 
             var upLine = _textArea.Document.Lines[rowAfterMove];
             var col = this.Position.Column;
-            if (this.Position.Column > upLine.Text.Length - TextDocument.EndOfLine.Length) {
-                col = upLine.Text.Length - TextDocument.EndOfLine.Length;
+            if (this.Position.Column > upLine.Length) {
+                col = upLine.Length;
             }
             this.Position = new TextPosition(rowAfterMove, col);
         }
@@ -168,13 +170,14 @@ namespace MEdit_wpf {
         }
 
         private void MoveLineDown() {
+            var lines = _textArea.Document.Lines;
             var rowAfterMove = this.Position.Row + 1;
-            if (rowAfterMove > _textArea.Document.Lines.Count - 1) return;
+            if (rowAfterMove > lines.Count - 1) return;
 
-            var downLine = _textArea.Document.Lines[rowAfterMove];
+            var downLine = lines[rowAfterMove];
             var col = this.Position.Column;
-            if (this.Position.Column > downLine.Text.Length - TextDocument.EndOfLine.Length) {
-                col = downLine.Text.Length - TextDocument.EndOfLine.Length;
+            if (this.Position.Column > downLine.Length) {
+                col = downLine.Length;
             }
             this.Position = new TextPosition(rowAfterMove, col);
         }
@@ -198,7 +201,7 @@ namespace MEdit_wpf {
 
         private void MoveToLineEnd() {
             var line = _textArea.Document.Lines[this.Position.Row];
-            this.Position = new TextPosition(this.Position.Row, line.Text.Length - TextDocument.EndOfLine.Length);
+            this.Position = new TextPosition(this.Position.Row, line.Length);
         }
 
         private void MoveToLineEndSelecting() {
@@ -217,9 +220,9 @@ namespace MEdit_wpf {
         }
 
         private void MoveToDocumentEnd() {
-            var lastLine = _textArea.Document.Lines[_textArea.Document.Lines.Count - 1];
-            var col = lastLine.Text.Length - TextDocument.EndOfLine.Length;
-            this.Position = new TextPosition(lastLine.LineNumber, col);
+            var lines = _textArea.Document.Lines;
+            var lastLine = lines.Find(x => x.LineNumber == lines.Max(y => y.LineNumber));
+            this.Position = new TextPosition(lastLine.LineNumber, lastLine.Length);
         }
 
         private void MoveToDocumentEndSelecting() {

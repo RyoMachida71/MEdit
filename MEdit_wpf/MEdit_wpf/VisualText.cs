@@ -92,7 +92,7 @@ namespace MEdit_wpf {
             {
                 var line = document.Lines[row];
                 var startCol = row == start.Row ? start.Column : 0;
-                var endCol = row == end.Row ? end.Column : line.Text.Length - TextDocument.EndOfLine.Length;
+                var endCol = row == end.Row ? end.Column : line.Length;
                 var position = GetCaretScreenPosition(row == start.Row ? selection.StartPosition : new TextPosition(row, 0));
                 for (int col = startCol; col <= endCol; ++col)
                 {
@@ -115,9 +115,9 @@ namespace MEdit_wpf {
             for (var row = start.Row; row >= end.Row; --row)
             {
                 var line = document.Lines[row];
-                var startCol = row == start.Row ? start.Column : line.Text.Length - TextDocument.EndOfLine.Length;
+                var startCol = row == start.Row ? start.Column : line.Length;
                 var endCol = row == end.Row ? end.Column : 0;
-                var position = GetCaretScreenPosition(row == start.Row ? selection.StartPosition : new TextPosition(row, line.Text.Length - TextDocument.EndOfLine.Length));
+                var position = GetCaretScreenPosition(row == start.Row ? selection.StartPosition : new TextPosition(row, line.Length));
                 for (int col = startCol; col >= endCol; --col)
                 {
                     var nextPosition = GetCaretScreenPosition(new TextPosition(row, col));

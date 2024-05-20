@@ -2,13 +2,10 @@
 namespace MEdit_wpf.Selection {
     public class SingleSelection : ISelection {
 
-        private ITextArea _textArea;
-
-        public SingleSelection(ITextArea textArea)
+        public SingleSelection()
         {
             StartPosition = new TextPosition(0, 0);
             EndPosition = new TextPosition(0, 0);
-            _textArea = textArea;
         }
 
         public TextPosition StartPosition { get; private set; }

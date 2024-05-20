@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MEdit_wpf {
     public class TextDocument : ITextDocument {
 
         public static readonly string EndOfLine = "\r\n";
-
-        private List<DocumentLine> _lines = new List<DocumentLine>();
 
         private StringBuilder _buffer;
         public TextDocument(string text = "") {
@@ -23,19 +22,19 @@ namespace MEdit_wpf {
 
         public ImmutableList<DocumentLine> Lines {
             get {
-                _lines.Clear();
-                if (string.IsNullOrEmpty(this.Text)) return _lines.ToImmutableList();
+                var lines = new List<DocumentLine>();
+                if (string.IsNullOrEmpty(this.Text)) return lines.ToImmutableList();
 
                 var reader = new StringReader(this.Text);
                 int lineNumber = 0;
                 int offset = 0;
                 while (reader.Peek() > -1) {
-                    var line = reader.ReadLine() + EndOfLine;
-                    _lines.Add(new DocumentLine(lineNumber, offset, line));
+                    var line = reader.ReadLine();
+                    lines.Add(new DocumentLine(lineNumber, offset, line));
                     ++lineNumber;
-                    offset += line.Length;
+                    offset += line.Length + EndOfLine.Length;
                 }
-                return _lines.ToImmutableList();
+                return lines.ToImmutableList();
             }
         }
 

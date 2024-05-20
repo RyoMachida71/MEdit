@@ -22,8 +22,8 @@ namespace MEdit_Test {
             var text = "This is the first line.\r\nThis is the second line.\r\n";
             var document = new TextDocument(text);
             Assert.That(document.Lines, Has.Count.EqualTo(2));
-            Assert.That(document.Lines[0].Text, Is.EqualTo("This is the first line.\r\n"));
-            Assert.That(document.Lines[1].Text, Is.EqualTo("This is the second line.\r\n"));
+            Assert.That(document.Lines[0].Text, Is.EqualTo("This is the first line."));
+            Assert.That(document.Lines[1].Text, Is.EqualTo("This is the second line."));
         }
 
         [TestCase(0, 0, 0, 0, "", TestName = "Empty")]

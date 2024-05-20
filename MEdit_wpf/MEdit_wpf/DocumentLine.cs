@@ -16,5 +16,7 @@ namespace MEdit_wpf {
         public int Offset { get; private set; }
 
         public string Text { get; private set; }
+
+        public int Length => Text.Length;
     }
 }
