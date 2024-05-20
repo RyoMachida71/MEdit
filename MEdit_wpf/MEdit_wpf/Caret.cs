@@ -197,7 +197,6 @@ namespace MEdit_wpf {
         }
 
         private void MoveToLineEnd() {
-            if (_textArea.Document.Lines.Count == 0) return;
             var line = _textArea.Document.Lines[this.Position.Row];
             this.Position = new TextPosition(this.Position.Row, line.Text.Length - TextDocument.EndOfLine.Length);
         }
@@ -218,8 +217,6 @@ namespace MEdit_wpf {
         }
 
         private void MoveToDocumentEnd() {
-            if (_textArea.Document.Lines.Count == 0) return;
-
             var lastLine = _textArea.Document.Lines[_textArea.Document.Lines.Count - 1];
             var col = lastLine.Text.Length - TextDocument.EndOfLine.Length;
             this.Position = new TextPosition(lastLine.LineNumber, col);
