@@ -10,6 +10,8 @@ namespace MEdit_wpf {
 
         public static readonly string EndOfLine = "\r\n";
 
+        private readonly string[] _splitDelimiter = new[] { EndOfLine };
+
         private StringBuilder _buffer;
         public TextDocument(string text = "") {
             _buffer = new StringBuilder(text);
@@ -25,14 +27,12 @@ namespace MEdit_wpf {
                 var lines = new List<DocumentLine>();
                 if (string.IsNullOrEmpty(this.Text)) return lines.ToImmutableList();
 
-                var reader = new StringReader(this.Text);
-                int lineNumber = 0;
+                var splited = this.Text.Split(_splitDelimiter, StringSplitOptions.None);
                 int offset = 0;
-                while (reader.Peek() > -1) {
-                    var line = reader.ReadLine();
-                    lines.Add(new DocumentLine(lineNumber, offset, line));
-                    ++lineNumber;
-                    offset += line.Length + EndOfLine.Length;
+                for (int lineNumber = 0; lineNumber < splited.Length; ++lineNumber)
+                {
+                    lines.Add(new DocumentLine(lineNumber, offset, splited[lineNumber]));
+                    offset += splited[lineNumber].Length + EndOfLine.Length;
                 }
                 return lines.ToImmutableList();
             }
