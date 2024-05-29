@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -47,9 +48,36 @@ namespace MEdit_wpf {
             _buffer.Insert(offset, input.Value);
         }
 
+        public void Delete(TextPosition start, TextPosition end) {
+            int startOffset;
+            int endOffset;
+
+            if (start < end) {
+                startOffset = this.GetOffset(start);
+                endOffset = this.GetOffset(end);
+            } else {
+                startOffset = this.GetOffset(end);
+                endOffset = this.GetOffset(start);
+            }
+            int deleteLength;
+            if (startOffset == endOffset) {
+                deleteLength = IsEndOfLine(startOffset) ? 2 : 1;
+            } else {
+                deleteLength = Math.Abs(startOffset - endOffset);
+            }
+            
+            _buffer.Remove(startOffset, deleteLength);
+        }
+
+        private bool IsEndOfLine(int offset) {
+            if (_buffer[offset] != '\r') return false;
+            if (_buffer[offset + 1] != '\n') return false;
+            return true;
+        }
+
         private int GetOffset(TextPosition position) {
             var line = Lines.Find(x => x.LineNumber == position.Row);
-            if (line == null) return _buffer.Length;
+            if (line == null) throw new ArgumentException($"Couldn't find line by TextPosition({ position })");
 
             return line.Offset + position.Column;
         }

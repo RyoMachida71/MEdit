@@ -61,5 +61,7 @@ namespace MEdit_wpf {
         }
 
         public override int GetHashCode() => unchecked(191 * Row.GetHashCode() ^ Column.GetHashCode());
+
+        public override string ToString() => $"Row:{Row} Colmun:{Column}";
     }
 }

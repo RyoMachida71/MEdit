@@ -18,6 +18,44 @@ namespace MEdit_Test {
         }
 
         [Test]
+        public void TestDeleteText()
+        {
+            var text = "test\r\ntest";
+            var document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 0), new TextPosition(0, 0));
+            Assert.That(document.Text, Is.EqualTo("est\r\ntest"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 3), new TextPosition(0, 3));
+            Assert.That(document.Text, Is.EqualTo("tes\r\ntest"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 4), new TextPosition(0, 4));
+            Assert.That(document.Text, Is.EqualTo("testtest"));
+        }
+
+        [Test]
+        public void TestDeleteRange()
+        {
+            var text = "test\r\ntest";
+            var document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 1), new TextPosition(0, 3));
+            Assert.That(document.Text, Is.EqualTo("tt\r\ntest"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 4), new TextPosition(1, 0));
+            Assert.That(document.Text, Is.EqualTo("testtest"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 4), new TextPosition(1, 2));
+            Assert.That(document.Text, Is.EqualTo("testst"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(1, 2), new TextPosition(1, 4));
+            Assert.That(document.Text, Is.EqualTo("test\r\nte"));
+        }
+
+        [Test]
         public void TestLines() {
             var text = "This is the first line.\r\nThis is the second line.\r\n";
             var document = new TextDocument(text);
