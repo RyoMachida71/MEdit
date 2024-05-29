@@ -4,17 +4,21 @@ namespace MEdit_Test {
     public class TestTextDocument {
 
         [Test]
-        public void TestPrependText() {
+        public void TestAddText() {
             var document = new TextDocument();
-            document.Insert(new TextPosition(0, 0), new TextInput("test"));
+            document.Replace(new TextPosition(0, 0), new TextPosition(0, 0), new TextInput("test"));
             Assert.That(document.Text, Is.EqualTo("test"));
+
+            document = new TextDocument("test");
+            document.Replace(new TextPosition(0, 2), new TextPosition(0, 2), new TextInput("\r\n"));
+            Assert.That(document.Text, Is.EqualTo("te\r\nst"));
         }
 
         [Test]
-        public void TestAppendText() {
+        public void TestAddRangeText() {
             var document = new TextDocument("test");
-            document.Insert(new TextPosition(0, 4), new TextInput("test"));
-            Assert.That(document.Text, Is.EqualTo("testtest"));
+            document.Replace(new TextPosition(0, 2), new TextPosition(0, 4), new TextInput("test"));
+            Assert.That(document.Text, Is.EqualTo("tetest"));
         }
 
         [Test]

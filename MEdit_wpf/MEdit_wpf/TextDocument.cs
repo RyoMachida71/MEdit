@@ -1,9 +1,6 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MEdit_wpf {
@@ -26,8 +23,6 @@ namespace MEdit_wpf {
         public ImmutableList<DocumentLine> Lines {
             get {
                 var lines = new List<DocumentLine>();
-                if (string.IsNullOrEmpty(this.Text)) return lines.ToImmutableList();
-
                 var splited = this.Text.Split(_splitDelimiter, StringSplitOptions.None);
                 int offset = 0;
                 for (int lineNumber = 0; lineNumber < splited.Length; ++lineNumber)
@@ -48,7 +43,31 @@ namespace MEdit_wpf {
             _buffer.Insert(offset, input.Value);
         }
 
+        public void Replace(TextPosition start, TextPosition end, TextInput input) {
+            (int startOffset, int endOffset) = GetOffsetRange(start, end);
+
+            if (startOffset == endOffset) {
+                _buffer.Insert(startOffset, input.Value);
+            } else {
+                _buffer.Remove(startOffset, Math.Abs(startOffset - endOffset));
+                _buffer.Insert(startOffset, input.Value);
+            }
+        }
+
         public void Delete(TextPosition start, TextPosition end) {
+            (int startOffset, int endOffset) = GetOffsetRange(start, end);
+
+            var deleteLength = startOffset == endOffset ? IsEndOfLine(startOffset) ? 2 : 1 : Math.Abs(startOffset - endOffset);
+            _buffer.Remove(startOffset, deleteLength);
+        }
+
+        private bool IsEndOfLine(int offset) {
+            if (_buffer[offset] != '\r') return false;
+            if (_buffer[offset + 1] != '\n') return false;
+            return true;
+        }
+
+        private Tuple<int, int> GetOffsetRange(TextPosition start, TextPosition end) {
             int startOffset;
             int endOffset;
 
@@ -59,20 +78,7 @@ namespace MEdit_wpf {
                 startOffset = this.GetOffset(end);
                 endOffset = this.GetOffset(start);
             }
-            int deleteLength;
-            if (startOffset == endOffset) {
-                deleteLength = IsEndOfLine(startOffset) ? 2 : 1;
-            } else {
-                deleteLength = Math.Abs(startOffset - endOffset);
-            }
-            
-            _buffer.Remove(startOffset, deleteLength);
-        }
-
-        private bool IsEndOfLine(int offset) {
-            if (_buffer[offset] != '\r') return false;
-            if (_buffer[offset + 1] != '\n') return false;
-            return true;
+            return new Tuple<int, int>(startOffset, endOffset);
         }
 
         private int GetOffset(TextPosition position) {

@@ -33,7 +33,7 @@ namespace MEdit_wpf {
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             var input = new TextInput(e.Text);
-            _document.Insert(_caret.Position, input);
+            _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
             _caret.UpdatePos(input);
             this.InvalidateVisual();
         }

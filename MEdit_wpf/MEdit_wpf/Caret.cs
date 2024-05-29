@@ -30,6 +30,7 @@ namespace MEdit_wpf {
                 col += input.Length;
             }
             this.Position = new TextPosition(row, col);
+            this.Selection.Unselect(this.Position);
         }
 
         public void Move(CaretMovementType movement) {
