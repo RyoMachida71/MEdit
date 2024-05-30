@@ -10,6 +10,10 @@ namespace MEdit_wpf {
 
         private readonly string[] _splitDelimiter = new[] { EndOfLine };
 
+        private bool _shouldConstructLines = true;
+
+        private List<DocumentLine> _lines = new List<DocumentLine>();
+
         private StringBuilder _buffer;
         public TextDocument(string text = "") {
             _buffer = new StringBuilder(text);
@@ -22,15 +26,19 @@ namespace MEdit_wpf {
 
         public ImmutableList<DocumentLine> Lines {
             get {
-                var lines = new List<DocumentLine>();
+                if (!_shouldConstructLines) return _lines.ToImmutableList();
+
+                _shouldConstructLines = false;
+
+                _lines.Clear();
                 var splited = this.Text.Split(_splitDelimiter, StringSplitOptions.None);
                 int offset = 0;
                 for (int lineNumber = 0; lineNumber < splited.Length; ++lineNumber)
                 {
-                    lines.Add(new DocumentLine(lineNumber, offset, splited[lineNumber]));
+                    _lines.Add(new DocumentLine(lineNumber, offset, splited[lineNumber]));
                     offset += splited[lineNumber].Length + EndOfLine.Length;
                 }
-                return lines.ToImmutableList();
+                return _lines.ToImmutableList();
             }
         }
 
@@ -52,6 +60,8 @@ namespace MEdit_wpf {
                 _buffer.Remove(startOffset, Math.Abs(startOffset - endOffset));
                 _buffer.Insert(startOffset, input.Value);
             }
+
+            _shouldConstructLines = true;
         }
 
         public void Delete(TextPosition start, TextPosition end) {
@@ -59,6 +69,8 @@ namespace MEdit_wpf {
 
             var deleteLength = startOffset == endOffset ? IsEndOfLine(startOffset) ? 2 : 1 : Math.Abs(startOffset - endOffset);
             _buffer.Remove(startOffset, deleteLength);
+
+            _shouldConstructLines = true;
         }
 
         private bool IsEndOfLine(int offset) {
