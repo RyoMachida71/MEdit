@@ -14,22 +14,16 @@ namespace MEdit_wpf {
             _textArea = textArea;
             _showCaret = showCaret;
             Selection = new SingleSelection();
+
+            _textArea.Document.DocumentChanged += DocumentChanged;
         }
 
         public TextPosition Position { get; set; }
 
         public ISelection Selection { get; private set; }
 
-        public void UpdatePos(TextInput input) {
-            var row = this.Position.Row;
-            var col = this.Position.Column;
-            if (input.Value == TextDocument.EndOfLine) {
-                ++row;
-                col = 0;
-            } else {
-                col += input.Length;
-            }
-            this.Position = new TextPosition(row, col);
+        private void DocumentChanged(object sender, DocumentChangedEventArgs e) {
+            this.Position = e.NewPosition;
             this.Selection.Unselect(this.Position);
         }
 

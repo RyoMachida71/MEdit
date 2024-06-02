@@ -34,7 +34,6 @@ namespace MEdit_wpf {
             base.OnTextInput(e);
             var input = new TextInput(e.Text);
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
-            _caret.UpdatePos(input);
             this.InvalidateVisual();
         }
 

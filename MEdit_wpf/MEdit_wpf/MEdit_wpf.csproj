@@ -74,6 +74,7 @@
     <Compile Include="Caret.cs" />
     <Compile Include="CaretCommandBinder.cs" />
     <Compile Include="CaretMovementType.cs" />
+    <Compile Include="DocumentChangedEventArgs.cs" />
     <Compile Include="DocumentLine.cs" />
     <Compile Include="GeneralTextMarkerProperties.cs" />
     <Compile Include="GeneralTextParagraphProperties.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 
 namespace MEdit_wpf {
@@ -42,14 +43,7 @@ namespace MEdit_wpf {
             }
         }
 
-
-        public void Insert(TextPosition position, TextInput input) {
-            var offset = this.GetOffset(position);
-            if (offset > _buffer.Length) offset = _buffer.Length;
-            if (offset < 0) offset = 0;
-
-            _buffer.Insert(offset, input.Value);
-        }
+        public event EventHandler<DocumentChangedEventArgs> DocumentChanged;
 
         public void Replace(TextPosition start, TextPosition end, TextInput input) {
             (int startOffset, int endOffset) = GetOffsetRange(start, end);
@@ -62,6 +56,7 @@ namespace MEdit_wpf {
             }
 
             _shouldConstructLines = true;
+            OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(startOffset + input.Length)));
         }
 
         public void Delete(TextPosition start, TextPosition end) {
@@ -71,6 +66,7 @@ namespace MEdit_wpf {
             _buffer.Remove(startOffset, deleteLength);
 
             _shouldConstructLines = true;
+            OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(startOffset)));
         }
 
         private bool IsEndOfLine(int offset) {
@@ -98,6 +94,17 @@ namespace MEdit_wpf {
             if (line == null) throw new ArgumentException($"Couldn't find line by TextPosition({ position })");
 
             return line.Offset + position.Column;
+        }
+
+        private void OnDocumentChanged(DocumentChangedEventArgs e) {
+            if (DocumentChanged != null) {
+                DocumentChanged(this, e);
+            }
+        }
+
+        private TextPosition GetNewTextPosition(int newOffset) {
+            var line = this.Lines.OrderByDescending(x => x.LineNumber).FirstOrDefault(x => x.Offset <= newOffset);
+            return line == null ? TextPosition.Empty : new TextPosition(line.LineNumber, newOffset - line.Offset);
         }
 
         public string GetText(TextPosition startPos, TextPosition endPos) {

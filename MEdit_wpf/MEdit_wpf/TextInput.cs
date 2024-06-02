@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MEdit_wpf
 {
     public class TextInput
@@ -11,12 +6,14 @@ namespace MEdit_wpf
         public TextInput(string input)
         {
             if (string.IsNullOrEmpty(input)) Value = "";
-            else if(input == "\r" || input == "\n") Value = TextDocument.EndOfLine;
-            else Value = input;
+            else Value = ConvertEol(input);
         }
 
         public string Value { get; private set; }
 
         public int Length => Value.Length;
+
+        private string ConvertEol(string input) 
+            => input.Replace("\n", TextDocument.EndOfLine).Replace("\r\r", "\r");
     }
 }

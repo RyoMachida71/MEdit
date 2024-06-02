@@ -44,13 +44,16 @@ namespace MEdit_Test {
 
         [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
         [TestCase("abc", 0, 5, TestName = "OrdinalInput")]
+        [TestCase("a\r\nb\r\n", 2, 0, TestName = "NewLinesInput")]
         public void TestCaretPositionUpdateByInput(string input, int expectedRow, int expectedColumn) {
             var mock = new Mock<ITextArea>();
             var doc = new TextDocument("test");
             mock.SetupGet(x => x.Document).Returns(doc);
             var caret = new Caret(mock.Object, EmptyAction);
-            caret.Position = new TextPosition(0, 2);
-            caret.UpdatePos(new TextInput(input));
+            var position = new TextPosition(0, 2);
+            caret.Position = position;
+            caret.Selection.Unselect(caret.Position);
+            mock.Object.Document.Replace(caret.Selection.StartPosition, caret.Selection.EndPosition, new TextInput(input));
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
             Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
