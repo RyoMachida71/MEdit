@@ -49,6 +49,7 @@ namespace MEdit_Test {
             var mock = new Mock<ITextArea>();
             var doc = new TextDocument("test");
             mock.SetupGet(x => x.Document).Returns(doc);
+
             var caret = new Caret(mock.Object, EmptyAction);
             var position = new TextPosition(0, 2);
             caret.Position = position;
@@ -57,6 +58,52 @@ namespace MEdit_Test {
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
             Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
             Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
+        }
+
+        [Test]
+        public void TestCaretPositionWithSelectionUpdateByInput() {
+            var mock = new Mock<ITextArea>();
+            var doc = new TextDocument("test");
+            mock.SetupGet(x => x.Document).Returns(doc);
+
+            var caret = new Caret(mock.Object, EmptyAction);
+            var position = new TextPosition(0, 4);
+            caret.Position = position;
+            caret.Selection.StartOrExtend(new TextPosition(0, 2), caret.Position);
+            mock.Object.Document.Replace(caret.Selection.StartPosition, caret.Selection.EndPosition, new TextInput("test\r\ntest"));
+            Assert.That(caret.Position.Row, Is.EqualTo(1));
+            Assert.That(caret.Position.Column, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void TestCaretPositionUpdateByDelete() {
+            var mock = new Mock<ITextArea>();
+            var doc = new TextDocument("test");
+            mock.SetupGet(x => x.Document).Returns(doc);
+
+            var caret = new Caret(mock.Object, EmptyAction);
+            var position = new TextPosition(0, 2);
+            caret.Position = position;
+            caret.Selection.Unselect(caret.Position);
+            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition);
+            Assert.That(caret.Position.Row, Is.EqualTo(0));
+            Assert.That(caret.Position.Column, Is.EqualTo(2));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
+        }
+
+        [Test]
+        public void TestCaretPositionWithSelectionUpdateByDelete() {
+            var mock = new Mock<ITextArea>();
+            var doc = new TextDocument("test\r\ntest");
+            mock.SetupGet(x => x.Document).Returns(doc);
+
+            var caret = new Caret(mock.Object, EmptyAction);
+            var position = new TextPosition(1, 4);
+            caret.Position = position;
+            caret.Selection.StartOrExtend(new TextPosition(0, 2), caret.Position);
+            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition);
+            Assert.That(caret.Position.Row, Is.EqualTo(0));
+            Assert.That(caret.Position.Column, Is.EqualTo(2));
         }
     }
 }
