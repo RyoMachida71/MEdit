@@ -27,7 +27,11 @@ namespace MEdit_Test
         [Test]
         public void TestSingleEolInput()
         {
-            var input = new TextInput("\n");
+            var input = new TextInput("\r");
+            Assert.That(input.Value, Is.EqualTo("\r\n"));
+            Assert.That(input.Length, Is.EqualTo(2));
+
+            input = new TextInput("\n");
             Assert.That(input.Value, Is.EqualTo("\r\n"));
             Assert.That(input.Length, Is.EqualTo(2));
 

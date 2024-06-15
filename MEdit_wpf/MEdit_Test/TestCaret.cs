@@ -85,7 +85,7 @@ namespace MEdit_Test {
             var position = new TextPosition(0, 2);
             caret.Position = position;
             caret.Selection.Unselect(caret.Position);
-            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition);
+            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition, EditingDirection.Forward);
             Assert.That(caret.Position.Row, Is.EqualTo(0));
             Assert.That(caret.Position.Column, Is.EqualTo(2));
             Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
@@ -101,7 +101,7 @@ namespace MEdit_Test {
             var position = new TextPosition(1, 4);
             caret.Position = position;
             caret.Selection.StartOrExtend(new TextPosition(0, 2), caret.Position);
-            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition);
+            mock.Object.Document.Delete(caret.Selection.StartPosition, caret.Selection.EndPosition, EditingDirection.Forward);
             Assert.That(caret.Position.Row, Is.EqualTo(0));
             Assert.That(caret.Position.Column, Is.EqualTo(2));
         }

@@ -13,7 +13,7 @@ namespace MEdit_wpf
 
         public int Length => Value.Length;
 
-        private string ConvertEol(string input) 
-            => input.Replace("\n", TextDocument.EndOfLine).Replace("\r\r", "\r");
+        private string ConvertEol(string input)
+            => (input == "\r" || input == "\n") ? TextDocument.EndOfLine : input.Replace("\n", TextDocument.EndOfLine).Replace("\r\r", "\r");
     }
 }

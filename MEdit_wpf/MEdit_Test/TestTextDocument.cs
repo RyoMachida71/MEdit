@@ -1,4 +1,5 @@
 using MEdit_wpf;
+using System.Reflection.Metadata;
 
 namespace MEdit_Test {
     public class TestTextDocument {
@@ -22,19 +23,48 @@ namespace MEdit_Test {
         }
 
         [Test]
-        public void TestDeleteText()
-        {
+        public void TestDeleteBlankDocument() {
+            var blankDocument = new TextDocument();
+            var position = new TextPosition(0, 0);
+            blankDocument.Delete(position, position, EditingDirection.Forward);
+            Assert.That(blankDocument.Text, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void TestDeleteCharForward() {
             var text = "test\r\ntest";
             var document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 0), new TextPosition(0, 0));
+            var position = new TextPosition(1, 4);
+            document.Delete(position, position, EditingDirection.Forward);
+            Assert.That(document.Text, Is.EqualTo(text));
+
+            document = new TextDocument(text);
+            position = new TextPosition(0, 1);
+            document.Delete(position, position, EditingDirection.Forward);
+            Assert.That(document.Text, Is.EqualTo("tst\r\ntest"));
+
+            document = new TextDocument(text);
+            position = new TextPosition(0, 4);
+            document.Delete(position, position, EditingDirection.Forward);
+            Assert.That(document.Text, Is.EqualTo("testtest"));
+        }
+
+        [Test]
+        public void TestDeleteCharBackward() {
+            var text = "test\r\ntest";
+            var document = new TextDocument(text);
+            var position = new TextPosition(0, 0);
+            document.Delete(position, position, EditingDirection.Backward);
+            Assert.That(document.Text, Is.EqualTo(text));
+
+            document = new TextDocument(text);
+            position = new TextPosition(0, 1);
+            document.Delete(position, position, EditingDirection.Backward);
             Assert.That(document.Text, Is.EqualTo("est\r\ntest"));
 
             document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 3), new TextPosition(0, 3));
-            Assert.That(document.Text, Is.EqualTo("tes\r\ntest"));
-
-            document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 4), new TextPosition(0, 4));
+            position = new TextPosition(1, 0);
+            document.Delete(position, position, EditingDirection.Backward);
             Assert.That(document.Text, Is.EqualTo("testtest"));
         }
 
@@ -43,20 +73,28 @@ namespace MEdit_Test {
         {
             var text = "test\r\ntest";
             var document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 1), new TextPosition(0, 3));
+            document.Delete(new TextPosition(0, 1), new TextPosition(0, 3), EditingDirection.Forward);
             Assert.That(document.Text, Is.EqualTo("tt\r\ntest"));
 
             document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 4), new TextPosition(1, 0));
+            document.Delete(new TextPosition(0, 1), new TextPosition(0, 3), EditingDirection.Backward);
+            Assert.That(document.Text, Is.EqualTo("tt\r\ntest"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 4), new TextPosition(1, 0), EditingDirection.Forward);
             Assert.That(document.Text, Is.EqualTo("testtest"));
 
             document = new TextDocument(text);
-            document.Delete(new TextPosition(0, 4), new TextPosition(1, 2));
+            document.Delete(new TextPosition(0, 4), new TextPosition(1, 2), EditingDirection.Forward);
             Assert.That(document.Text, Is.EqualTo("testst"));
 
             document = new TextDocument(text);
-            document.Delete(new TextPosition(1, 2), new TextPosition(1, 4));
+            document.Delete(new TextPosition(1, 2), new TextPosition(1, 4), EditingDirection.Forward);
             Assert.That(document.Text, Is.EqualTo("test\r\nte"));
+
+            document = new TextDocument(text);
+            document.Delete(new TextPosition(0, 0), new TextPosition(1, 4), EditingDirection.Forward);
+            Assert.That(document.Text, Is.EqualTo(""));
         }
 
         [Test]
@@ -87,7 +125,7 @@ namespace MEdit_Test {
             Assert.That(document.Lines[2].Length, Is.EqualTo(4));
             Assert.That(document.Lines[2].Offset, Is.EqualTo(51));
 
-            document.Delete(new TextPosition(2, 0), new TextPosition(2, 4));
+            document.Delete(new TextPosition(2, 0), new TextPosition(2, 4), EditingDirection.Forward);
             Assert.That(document.Lines[2].Text, Is.EqualTo(""));
             Assert.That(document.Lines[2].LineNumber, Is.EqualTo(2));
             Assert.That(document.Lines[2].Length, Is.EqualTo(0));

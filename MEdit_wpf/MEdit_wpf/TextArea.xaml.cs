@@ -23,10 +23,17 @@ namespace MEdit_wpf {
             _caretLayer = new CaretLayer();
 
             AddVisualChild(_caretLayer);
-            CaretCommandBinder.SetBinding(_caret, this.CommandBindings, this.InputBindings);
+            CommandBinder.SetBinding(this, this.CommandBindings, this.InputBindings);
         }
 
-        public ITextDocument Document => _document; 
+        public ITextDocument Document => _document;
+
+        public Caret Caret => _caret;
+
+        public void DeleteText(EditingDirection direction) {
+            _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
+            this.InvalidateVisual();
+        }
 
         protected override int VisualChildrenCount => 1;
 

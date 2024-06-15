@@ -59,20 +59,40 @@ namespace MEdit_wpf {
             OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(startOffset + input.Length)));
         }
 
-        public void Delete(TextPosition start, TextPosition end) {
+        public void Delete(TextPosition start, TextPosition end, EditingDirection direction) {
+            if (_buffer.Length == 0) return;
+
             (int startOffset, int endOffset) = GetOffsetRange(start, end);
 
-            var deleteLength = startOffset == endOffset ? IsEndOfLine(startOffset) ? 2 : 1 : Math.Abs(startOffset - endOffset);
-            _buffer.Remove(startOffset, deleteLength);
-
+            var updatedOffset = startOffset;
+            if (startOffset == endOffset) {
+                updatedOffset = DeleteChar(startOffset, direction);
+            } else {
+                var deleteLength = Math.Abs(startOffset - endOffset);
+                _buffer.Remove(startOffset, deleteLength);
+            }
             _shouldConstructLines = true;
-            OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(startOffset)));
+            OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(updatedOffset)));
         }
 
-        private bool IsEndOfLine(int offset) {
-            if (_buffer[offset] != '\r') return false;
-            if (_buffer[offset + 1] != '\n') return false;
-            return true;
+        private int DeleteChar(int offset, EditingDirection direction) {
+            int offsetAfterDeletion;
+            if (direction == EditingDirection.Forward) {
+                if (offset == _buffer.Length) return offset;
+
+                var deleteLength = IsAtEndofLine(offset) ? EndOfLine.Length : 1;
+                _buffer.Remove(offset, deleteLength);
+                offsetAfterDeletion = offset;
+            } else {
+                if (offset == 0) return offset;
+
+                var isAtStartOfLine = this.Lines.Any(line => line.Offset == offset);
+                var adjustedOffset = isAtStartOfLine ? offset - EndOfLine.Length : offset - 1;
+                var deleteLength = isAtStartOfLine ? EndOfLine.Length : 1;
+                _buffer.Remove(adjustedOffset, deleteLength);
+                offsetAfterDeletion = adjustedOffset;
+            }
+            return offsetAfterDeletion;
         }
 
         private Tuple<int, int> GetOffsetRange(TextPosition start, TextPosition end) {
@@ -94,6 +114,12 @@ namespace MEdit_wpf {
             if (line == null) throw new ArgumentException($"Couldn't find line by TextPosition({ position })");
 
             return line.Offset + position.Column;
+        }
+
+        private bool IsAtEndofLine(int offset) {
+            if (_buffer[offset] != '\r') return false;
+            if (_buffer[offset + 1] != '\n') return false;
+            return true;
         }
 
         private void OnDocumentChanged(DocumentChangedEventArgs e) {

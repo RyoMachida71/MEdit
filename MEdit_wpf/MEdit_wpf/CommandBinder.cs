@@ -4,16 +4,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MEdit_wpf {
-    public static class CaretCommandBinder {
+    public static class CommandBinder {
 
-        private static Caret _caret;
+        private static TextArea _textArea;
 
         private static List<CommandBinding> _commands = new List<CommandBinding>();
 
         private static List<InputBinding> _inputs = new List<InputBinding>();
 
-        public static void SetBinding(Caret caret, CommandBindingCollection commands, InputBindingCollection inputs) {
-            _caret = caret;
+        public static void SetBinding(TextArea textArea, CommandBindingCollection commands, InputBindingCollection inputs) {
+            _textArea = textArea;
             commands.AddRange(_commands);
             inputs.AddRange(_inputs);
         }
@@ -32,7 +32,7 @@ namespace MEdit_wpf {
             return keyBinding;
         }
 
-        static CaretCommandBinder() {
+        static CommandBinder() {
             var none = ModifierKeys.None;
             var alt = ModifierKeys.Alt;
             var ctrl = ModifierKeys.Control;
@@ -55,11 +55,20 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.SelectToDocumentStart, ctrl | shift, Key.Home, OnMoveCaret(CaretMovementType.DocumentStartSelection));
             AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd));
             AddBinding(EditingCommands.SelectToDocumentEnd, ctrl | shift, Key.End, OnMoveCaret(CaretMovementType.DocumentEndSelection));
+
+            AddBinding(EditingCommands.Delete, none, Key.Delete, OnDeletePreviousChar(EditingDirection.Forward));
+            AddBinding(EditingCommands.Backspace, none, Key.Back, OnDeletePreviousChar(EditingDirection.Backward));
         }
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {
             return (s, e) => {
-                _caret.Move(type);
+                _textArea.Caret.Move(type);
+            };
+        }
+
+        private static ExecutedRoutedEventHandler OnDeletePreviousChar(EditingDirection direction) {
+            return (s, e) => {
+                _textArea.DeleteText(direction);
             };
         }
     }
