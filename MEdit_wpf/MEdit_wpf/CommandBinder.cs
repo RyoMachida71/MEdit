@@ -56,8 +56,8 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd));
             AddBinding(EditingCommands.SelectToDocumentEnd, ctrl | shift, Key.End, OnMoveCaret(CaretMovementType.DocumentEndSelection));
 
-            AddBinding(EditingCommands.Delete, none, Key.Delete, OnDeletePreviousChar(EditingDirection.Forward));
-            AddBinding(EditingCommands.Backspace, none, Key.Back, OnDeletePreviousChar(EditingDirection.Backward));
+            AddBinding(EditingCommands.Delete, none, Key.Delete, OnDeleteText(EditingDirection.Forward));
+            AddBinding(EditingCommands.Backspace, none, Key.Back, OnDeleteText(EditingDirection.Backward));
         }
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {
@@ -66,7 +66,7 @@ namespace MEdit_wpf {
             };
         }
 
-        private static ExecutedRoutedEventHandler OnDeletePreviousChar(EditingDirection direction) {
+        private static ExecutedRoutedEventHandler OnDeleteText(EditingDirection direction) {
             return (s, e) => {
                 _textArea.DeleteText(direction);
             };
