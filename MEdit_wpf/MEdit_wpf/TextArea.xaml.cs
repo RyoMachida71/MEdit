@@ -1,4 +1,5 @@
-﻿using MEdit_wpf.Document;
+﻿using MEdit_wpf.Caret;
+using MEdit_wpf.Document;
 using MEdit_wpf.Layer;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,7 @@ namespace MEdit_wpf {
     public partial class TextArea : Control, ITextArea {
 
         private TextDocument _document;
-        private Caret _caret;
+        private SingleCaret _caret;
         private CaretLayer _caretLayer;
         private VisualText _visualText;
 
@@ -20,7 +21,7 @@ namespace MEdit_wpf {
             InitializeComponent();
             _document = new TextDocument();
             _visualText = new VisualText();
-            _caret = new Caret(this, RenderCaret);
+            _caret = new SingleCaret(this, RenderCaret);
             _caretLayer = new CaretLayer();
 
             AddVisualChild(_caretLayer);
@@ -29,7 +30,7 @@ namespace MEdit_wpf {
 
         public ITextDocument Document => _document;
 
-        public Caret Caret => _caret;
+        public SingleCaret Caret => _caret;
 
         public void DeleteText(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);

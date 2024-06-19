@@ -1,16 +1,17 @@
 ﻿using MEdit_wpf;
+using MEdit_wpf.Caret;
 using MEdit_wpf.Document;
 using Moq;
 
 namespace MEdit_Test {
-    public class TestCaret {
+    public class TestSingleCaret {
         private static Action EmptyAction = () => { };
 
         [Test]
-        public void TestInitCaret() {
+        public void TestInitSingleCaret() {
             var mock = new Mock<ITextArea>();
             mock.SetupGet(x => x.Document).Returns(new TextDocument());
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             Assert.That(caret.Position.Row, Is.EqualTo(0));
             Assert.That(caret.Position.Column, Is.EqualTo(0));
         }
@@ -35,7 +36,7 @@ namespace MEdit_Test {
             var mock = new Mock<ITextArea>();
             var doc = new TextDocument("test\r\ntest\r\ntest");
             mock.SetupGet(x => x.Document).Returns(doc);
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             caret.Position = new TextPosition(row, column);
             caret.Move(type);
             Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
@@ -51,7 +52,7 @@ namespace MEdit_Test {
             var doc = new TextDocument("test");
             mock.SetupGet(x => x.Document).Returns(doc);
 
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             var position = new TextPosition(0, 2);
             caret.Position = position;
             caret.Selection.Unselect(caret.Position);
@@ -67,7 +68,7 @@ namespace MEdit_Test {
             var doc = new TextDocument("test");
             mock.SetupGet(x => x.Document).Returns(doc);
 
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             var position = new TextPosition(0, 4);
             caret.Position = position;
             caret.Selection.StartOrExtend(new TextPosition(0, 2), caret.Position);
@@ -82,7 +83,7 @@ namespace MEdit_Test {
             var doc = new TextDocument("test");
             mock.SetupGet(x => x.Document).Returns(doc);
 
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             var position = new TextPosition(0, 2);
             caret.Position = position;
             caret.Selection.Unselect(caret.Position);
@@ -98,7 +99,7 @@ namespace MEdit_Test {
             var doc = new TextDocument("test\r\ntest");
             mock.SetupGet(x => x.Document).Returns(doc);
 
-            var caret = new Caret(mock.Object, EmptyAction);
+            var caret = new SingleCaret(mock.Object, EmptyAction);
             var position = new TextPosition(1, 4);
             caret.Position = position;
             caret.Selection.StartOrExtend(new TextPosition(0, 2), caret.Position);

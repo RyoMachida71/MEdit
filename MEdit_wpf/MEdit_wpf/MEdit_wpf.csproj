@@ -71,9 +71,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Caret\Caret.cs" />
-    <Compile Include="Caret\CommandBinder.cs" />
+    <Compile Include="CaretNavigators\CharLeftNavigator.cs" />
+    <Compile Include="Caret\SingleCaret.cs" />
+    <Compile Include="CommandBinder.cs" />
     <Compile Include="Caret\CaretMovementType.cs" />
+    <Compile Include="Caret\ICaretNavigator.cs" />
     <Compile Include="Document\DocumentChangedEventArgs.cs" />
     <Compile Include="Document\DocumentLine.cs" />
     <Compile Include="EditingDirection.cs" />

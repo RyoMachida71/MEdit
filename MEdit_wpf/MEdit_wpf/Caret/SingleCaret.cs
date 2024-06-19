@@ -3,14 +3,14 @@ using MEdit_wpf.Selection;
 using System;
 using System.Linq;
 
-namespace MEdit_wpf {
-    public class Caret {
+namespace MEdit_wpf.Caret {
+    public class SingleCaret {
 
         private ITextArea _textArea;
 
         private Action _showCaret;
 
-        public Caret(ITextArea textArea, Action showCaret) {
+        public SingleCaret(ITextArea textArea, Action showCaret) {
             Position = new TextPosition(0, 0);
             _textArea = textArea;
             _showCaret = showCaret;
