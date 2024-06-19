@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media.TextFormatting;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.TextRendering {
     public class PlainTextSource :TextSource {
 
         private readonly string _text;

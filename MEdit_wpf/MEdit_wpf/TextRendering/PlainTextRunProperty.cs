@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Media.TextFormatting;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.TextRendering {
     public class PlainTextRunProperty : TextRunProperties {
 
         private Typeface _typeface;

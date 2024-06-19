@@ -71,27 +71,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Caret.cs" />
-    <Compile Include="CommandBinder.cs" />
-    <Compile Include="CaretMovementType.cs" />
-    <Compile Include="DocumentChangedEventArgs.cs" />
-    <Compile Include="DocumentLine.cs" />
+    <Compile Include="Caret\Caret.cs" />
+    <Compile Include="Caret\CommandBinder.cs" />
+    <Compile Include="Caret\CaretMovementType.cs" />
+    <Compile Include="Document\DocumentChangedEventArgs.cs" />
+    <Compile Include="Document\DocumentLine.cs" />
     <Compile Include="EditingDirection.cs" />
-    <Compile Include="GeneralTextMarkerProperties.cs" />
-    <Compile Include="GeneralTextParagraphProperties.cs" />
+    <Compile Include="TextRendering\GeneralTextMarkerProperties.cs" />
+    <Compile Include="TextRendering\GeneralTextParagraphProperties.cs" />
     <Compile Include="ITextArea.cs" />
-    <Compile Include="ITextDocument.cs" />
+    <Compile Include="Document\ITextDocument.cs" />
     <Compile Include="Layer\CaretLayer.cs" />
     <Compile Include="Layer\ICaretLayer.cs" />
     <Compile Include="Layer\LayerKind.cs" />
-    <Compile Include="PlainTextRunProperty.cs" />
-    <Compile Include="PlainTextSource.cs" />
+    <Compile Include="TextRendering\PlainTextRunProperty.cs" />
+    <Compile Include="TextRendering\PlainTextSource.cs" />
     <Compile Include="Selection\ISelection.cs" />
     <Compile Include="Selection\SingleSelection.cs" />
     <Compile Include="TextArea.xaml.cs">
       <DependentUpon>TextArea.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextDocument.cs" />
+    <Compile Include="Document\TextDocument.cs" />
     <Compile Include="TextInput.cs" />
     <Compile Include="TextPosition.cs" />
     <Compile Include="VisualText.cs" />

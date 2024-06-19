@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.TextFormatting;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.TextRendering {
     public class GeneralTextParagraphProperties : TextParagraphProperties {
 
         private bool _firstLineInParagraph;

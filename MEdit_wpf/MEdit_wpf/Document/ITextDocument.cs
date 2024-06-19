@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.Document {
     public interface ITextDocument {
         string Text { get; set; }
         ImmutableList<DocumentLine> Lines { get; }

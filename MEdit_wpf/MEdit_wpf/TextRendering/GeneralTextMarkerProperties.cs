@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media.TextFormatting;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.TextRendering {
     public class GeneralTextMarkerProperties : TextMarkerProperties {
         private double _offset;
         private TextSource _textSource;

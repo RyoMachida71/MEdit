@@ -1,4 +1,5 @@
 ﻿using MEdit_wpf;
+using MEdit_wpf.Document;
 using Moq;
 
 namespace MEdit_Test {

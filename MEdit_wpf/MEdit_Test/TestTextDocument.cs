@@ -1,5 +1,5 @@
 using MEdit_wpf;
-using System.Reflection.Metadata;
+using MEdit_wpf.Document;
 
 namespace MEdit_Test {
     public class TestTextDocument {

@@ -1,4 +1,4 @@
-﻿using MEdit_wpf;
+﻿using MEdit_wpf.Document;
 
 namespace MEdit_Test {
     public class TestDocumentLine {

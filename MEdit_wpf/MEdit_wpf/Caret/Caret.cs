@@ -1,4 +1,5 @@
-﻿using MEdit_wpf.Selection;
+﻿using MEdit_wpf.Document;
+using MEdit_wpf.Selection;
 using System;
 using System.Linq;
 

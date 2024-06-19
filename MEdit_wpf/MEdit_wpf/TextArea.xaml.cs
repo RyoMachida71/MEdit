@@ -1,4 +1,5 @@
-﻿using MEdit_wpf.Layer;
+﻿using MEdit_wpf.Document;
+using MEdit_wpf.Layer;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

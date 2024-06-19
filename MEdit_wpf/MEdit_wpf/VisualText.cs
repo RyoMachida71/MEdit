@@ -1,13 +1,13 @@
-﻿using MEdit_wpf.Selection;
+﻿using MEdit_wpf.Document;
+using MEdit_wpf.Selection;
+using MEdit_wpf.TextRendering;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
-using System.Xml.Linq;
 
 namespace MEdit_wpf {
     public class VisualText {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MEdit_wpf {
+namespace MEdit_wpf.Document {
     public class DocumentChangedEventArgs : EventArgs {
 
         public DocumentChangedEventArgs(TextPosition newPosition)
