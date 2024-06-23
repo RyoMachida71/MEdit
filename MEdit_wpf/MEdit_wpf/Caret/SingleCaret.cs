@@ -1,4 +1,5 @@
-﻿using MEdit_wpf.Document;
+﻿using MEdit_wpf.CaretNavigators;
+using MEdit_wpf.Document;
 using MEdit_wpf.Selection;
 using System;
 using System.Linq;
@@ -33,8 +34,6 @@ namespace MEdit_wpf.Caret {
 
             switch (movement) {
                 case CaretMovementType.None:
-                    break;
-                case CaretMovementType.Backspace:
                     break;
                 case CaretMovementType.CharLeft:
                     MoveCharLeft();

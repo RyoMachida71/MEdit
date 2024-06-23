@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MEdit_wpf.CaretNavigators;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;

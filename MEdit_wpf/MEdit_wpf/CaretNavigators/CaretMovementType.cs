@@ -1,8 +1,7 @@
 ﻿
-namespace MEdit_wpf {
+namespace MEdit_wpf.CaretNavigators {
     public enum CaretMovementType {
         None,
-        Backspace,
         CharLeft,
         CharLeftExtendingSelection,
         CharRight,

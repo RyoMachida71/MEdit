@@ -1,5 +1,6 @@
 ﻿using MEdit_wpf;
 using MEdit_wpf.Caret;
+using MEdit_wpf.CaretNavigators;
 using MEdit_wpf.Document;
 using Moq;
 

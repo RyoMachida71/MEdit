@@ -1,7 +1,6 @@
 ﻿using MEdit_wpf;
 using MEdit_wpf.CaretNavigators;
 using MEdit_wpf.Document;
-using Moq;
 
 namespace MEdit_Test.TestCaretNavigators {
     public class TestCharLeftNavigator {
