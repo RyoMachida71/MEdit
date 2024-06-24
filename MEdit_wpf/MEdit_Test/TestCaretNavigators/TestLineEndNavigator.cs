@@ -1,5 +1,4 @@
-﻿
-using MEdit_wpf.CaretNavigators;
+﻿using MEdit_wpf.CaretNavigators;
 using MEdit_wpf.Document;
 using MEdit_wpf;
 

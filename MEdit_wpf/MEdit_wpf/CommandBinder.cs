@@ -39,34 +39,34 @@ namespace MEdit_wpf {
             var ctrl = ModifierKeys.Control;
             var shift = ModifierKeys.Shift;
 
-            AddBinding(EditingCommands.MoveLeftByCharacter, none, Key.Left, OnMoveCaret(CaretMovementType.CharLeft));
-            AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaret(CaretMovementType.CharLeftExtendingSelection));
-            AddBinding(EditingCommands.MoveRightByCharacter, none, Key.Right, OnMoveCaret(CaretMovementType.CharRight));
-            AddBinding(EditingCommands.SelectRightByCharacter, shift, Key.Right, OnMoveCaret(CaretMovementType.CharRightExtendingSelection));
-            AddBinding(EditingCommands.MoveUpByLine, none, Key.Up, OnMoveCaret(CaretMovementType.LineUp));
-            AddBinding(EditingCommands.SelectUpByLine, shift, Key.Up, OnMoveCaret(CaretMovementType.LineUpExtendingSelection));
-            AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown));
-            AddBinding(EditingCommands.SelectDownByLine, shift, Key.Down, OnMoveCaret(CaretMovementType.LineDownExtendingSelection));
-            AddBinding(EditingCommands.MoveLeftByWord, ctrl, Key.Left, OnMoveCaret(CaretMovementType.WordLeft));
-            AddBinding(EditingCommands.SelectLeftByWord, ctrl | shift, Key.Left, OnMoveCaret(CaretMovementType.WordLeft));
-            AddBinding(EditingCommands.MoveRightByWord, ctrl, Key.Right, OnMoveCaret(CaretMovementType.WordRight));
-            AddBinding(EditingCommands.SelectRightByWord, ctrl | shift, Key.Right, OnMoveCaret(CaretMovementType.WordRight));
-            AddBinding(EditingCommands.MoveToLineStart, none, Key.Home, OnMoveCaret(CaretMovementType.LineStart));
-            AddBinding(EditingCommands.SelectToLineStart, shift, Key.Home, OnMoveCaret(CaretMovementType.LineStartExtendingSelection));
-            AddBinding(EditingCommands.MoveToLineEnd, none, Key.End, OnMoveCaret(CaretMovementType.LineEnd));
-            AddBinding(EditingCommands.SelectToLineEnd, shift, Key.End, OnMoveCaret(CaretMovementType.LineEndExtendingSelection));
-            AddBinding(EditingCommands.MoveToDocumentStart, ctrl, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart));
-            AddBinding(EditingCommands.SelectToDocumentStart, ctrl | shift, Key.Home, OnMoveCaret(CaretMovementType.DocumentStartSelection));
-            AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd));
-            AddBinding(EditingCommands.SelectToDocumentEnd, ctrl | shift, Key.End, OnMoveCaret(CaretMovementType.DocumentEndSelection));
+            AddBinding(EditingCommands.MoveLeftByCharacter, none, Key.Left, OnMoveCaret(CaretMovementType.CharLeft, false));
+            AddBinding(EditingCommands.SelectLeftByCharacter, shift, Key.Left, OnMoveCaret(CaretMovementType.CharLeft, true));
+            AddBinding(EditingCommands.MoveRightByCharacter, none, Key.Right, OnMoveCaret(CaretMovementType.CharRight, false));
+            AddBinding(EditingCommands.SelectRightByCharacter, shift, Key.Right, OnMoveCaret(CaretMovementType.CharRight, true));
+            AddBinding(EditingCommands.MoveUpByLine, none, Key.Up, OnMoveCaret(CaretMovementType.LineUp, false));
+            AddBinding(EditingCommands.SelectUpByLine, shift, Key.Up, OnMoveCaret(CaretMovementType.LineUp, true));
+            AddBinding(EditingCommands.MoveDownByLine, none, Key.Down, OnMoveCaret(CaretMovementType.LineDown, false));
+            AddBinding(EditingCommands.SelectDownByLine, shift, Key.Down, OnMoveCaret(CaretMovementType.LineDown, true));
+            AddBinding(EditingCommands.MoveLeftByWord, ctrl, Key.Left, OnMoveCaret(CaretMovementType.WordLeft, false));
+            AddBinding(EditingCommands.SelectLeftByWord, ctrl | shift, Key.Left, OnMoveCaret(CaretMovementType.WordLeft, true));
+            AddBinding(EditingCommands.MoveRightByWord, ctrl, Key.Right, OnMoveCaret(CaretMovementType.WordRight, false));
+            AddBinding(EditingCommands.SelectRightByWord, ctrl | shift, Key.Right, OnMoveCaret(CaretMovementType.WordRight, true));
+            AddBinding(EditingCommands.MoveToLineStart, none, Key.Home, OnMoveCaret(CaretMovementType.LineStart, false));
+            AddBinding(EditingCommands.SelectToLineStart, shift, Key.Home, OnMoveCaret(CaretMovementType.LineStart, true));
+            AddBinding(EditingCommands.MoveToLineEnd, none, Key.End, OnMoveCaret(CaretMovementType.LineEnd, false));
+            AddBinding(EditingCommands.SelectToLineEnd, shift, Key.End, OnMoveCaret(CaretMovementType.LineEnd, true));
+            AddBinding(EditingCommands.MoveToDocumentStart, ctrl, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, false));
+            AddBinding(EditingCommands.SelectToDocumentStart, ctrl | shift, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, true));
+            AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd, false));
+            AddBinding(EditingCommands.SelectToDocumentEnd, ctrl | shift, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd, true));
 
             AddBinding(EditingCommands.Delete, none, Key.Delete, OnDeleteText(EditingDirection.Forward));
             AddBinding(EditingCommands.Backspace, none, Key.Back, OnDeleteText(EditingDirection.Backward));
         }
 
-        private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type) {
+        private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type, bool isSelectionMode) {
             return (s, e) => {
-                _textArea.Caret.Move(type);
+                _textArea.Caret.Move(CaretNavigatorContainer.GetNavigator(type), isSelectionMode);
             };
         }
 

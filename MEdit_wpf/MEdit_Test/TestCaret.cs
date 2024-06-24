@@ -3,6 +3,7 @@ using MEdit_wpf.Caret;
 using MEdit_wpf.CaretNavigators;
 using MEdit_wpf.Document;
 using Moq;
+using System.Xml.Serialization;
 
 namespace MEdit_Test {
     public class TestSingleCaret {
@@ -13,36 +14,49 @@ namespace MEdit_Test {
             var mock = new Mock<ITextArea>();
             mock.SetupGet(x => x.Document).Returns(new TextDocument());
             var caret = new SingleCaret(mock.Object, EmptyAction);
-            Assert.That(caret.Position.Row, Is.EqualTo(0));
-            Assert.That(caret.Position.Column, Is.EqualTo(0));
+            Assert.That(caret.Position, Is.EqualTo(new TextPosition(0, 0)));
         }
 
-        [TestCase(CaretMovementType.CharLeft, 0, 0, 0, 0, TestName = "TopLeft")]
-        [TestCase(CaretMovementType.CharLeft, 0, 2, 0, 1, TestName = "MoveLeft")]
-        [TestCase(CaretMovementType.CharRight, 2, 4, 2, 4, TestName = "BottomRight")]
-        [TestCase(CaretMovementType.CharRight, 0, 1, 0, 2, TestName = "MoveRight")]
-        [TestCase(CaretMovementType.LineUp, 0, 1, 0, 1, TestName = "TopLineUp")]
-        [TestCase(CaretMovementType.LineUp, 2, 3, 1, 3, TestName = "MoveLineUp")]
-        [TestCase(CaretMovementType.LineDown, 2, 1, 2, 1, TestName = "BottomLineDown")]
-        [TestCase(CaretMovementType.LineDown, 1, 1, 2, 1, TestName = "MoveLineDown")]
-        [TestCase(CaretMovementType.LineStart, 0, 3, 0, 0, TestName = "LineStart")]
-        [TestCase(CaretMovementType.LineStart, 0, 0, 0, 0, TestName = "LineStartAtLineStart")]
-        [TestCase(CaretMovementType.LineEnd, 0, 3, 0, 4, TestName = "LineEnd")]
-        [TestCase(CaretMovementType.LineEnd, 0, 4, 0, 4, TestName = "LineStartAtLineEnd")]
-        [TestCase(CaretMovementType.DocumentStart, 1, 4, 0, 0, TestName = "DocumentStart")]
-        [TestCase(CaretMovementType.DocumentStart, 0, 0, 0, 0, TestName = "DocumentStartAtDocumentStart")]
-        [TestCase(CaretMovementType.DocumentEnd, 1, 4, 2, 4, TestName = "DocumentEnd")]
-        [TestCase(CaretMovementType.DocumentEnd, 2, 4, 2, 4, TestName = "DocumentEndAtDocumentEnd")]
-        public void TestMoveCaret(CaretMovementType type, int row, int column, int expectedRow, int expectedColumn) {
-            var mock = new Mock<ITextArea>();
-            var doc = new TextDocument("test\r\ntest\r\ntest");
-            mock.SetupGet(x => x.Document).Returns(doc);
-            var caret = new SingleCaret(mock.Object, EmptyAction);
-            caret.Position = new TextPosition(row, column);
-            caret.Move(type);
-            Assert.That(caret.Position.Row, Is.EqualTo(expectedRow));
-            Assert.That(caret.Position.Column, Is.EqualTo(expectedColumn));
-            Assert.That(caret.Selection.StartPosition, Is.EqualTo(caret.Selection.EndPosition));
+        [Test]
+        public void TestCaretStaysCurrentPositionWhenDocumentIsEmpty() {
+            var textAreaMock = new Mock<ITextArea>();
+            textAreaMock.SetupGet(x => x.Document).Returns(new TextDocument());
+            var naviMock = new Mock<ICaretNavigator>();
+            naviMock.Setup(x => x.GetNextPosition(new TextPosition(0, 0), textAreaMock.Object.Document)).Returns(new TextPosition(0, 1));
+
+            var caret = new SingleCaret(textAreaMock.Object, EmptyAction);
+            caret.Move(naviMock.Object, false);
+            Assert.That(caret.Position, Is.EqualTo(new TextPosition(0, 0)));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(new TextPosition(0, 0)));
+            Assert.That(caret.Selection.EndPosition, Is.EqualTo(new TextPosition(0, 0)));
+        }
+
+        [Test]
+        public void TestCaretMoves() {
+            var textAreaMock = new Mock<ITextArea>();
+            textAreaMock.SetupGet(x => x.Document).Returns(new TextDocument("test"));
+            var naviMock = new Mock<ICaretNavigator>();
+            naviMock.Setup(x => x.GetNextPosition(new TextPosition(0, 0), textAreaMock.Object.Document)).Returns(new TextPosition(0, 1));
+
+            var caret = new SingleCaret(textAreaMock.Object, EmptyAction);
+            caret.Move(naviMock.Object, false);
+            Assert.That(caret.Position, Is.EqualTo(new TextPosition(0, 1)));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(new TextPosition(0, 1)));
+            Assert.That(caret.Selection.EndPosition, Is.EqualTo(new TextPosition(0, 1)));
+        }
+
+        [Test]
+        public void TestCaretMovesWithSelection() {
+            var textAreaMock = new Mock<ITextArea>();
+            textAreaMock.SetupGet(x => x.Document).Returns(new TextDocument("test"));
+            var naviMock = new Mock<ICaretNavigator>();
+            naviMock.Setup(x => x.GetNextPosition(new TextPosition(0, 0), textAreaMock.Object.Document)).Returns(new TextPosition(0, 1));
+
+            var caret = new SingleCaret(textAreaMock.Object, EmptyAction);
+            caret.Move(naviMock.Object, true);
+            Assert.That(caret.Position, Is.EqualTo(new TextPosition(0, 1)));
+            Assert.That(caret.Selection.StartPosition, Is.EqualTo(new TextPosition(0, 0)));
+            Assert.That(caret.Selection.EndPosition, Is.EqualTo(new TextPosition(0, 1)));
         }
 
         [TestCase("\r\n", 1, 0, TestName = "NewLineInput")]
