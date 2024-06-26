@@ -17,8 +17,10 @@ namespace MEdit_wpf.CaretNavigators {
                     navigator = new CharRightNavigator();
                     break;
                 case CaretMovementType.WordLeft:
+                    navigator = new WordLeftNavigator();
                     break;
                 case CaretMovementType.WordRight:
+                    
                     break;
                 case CaretMovementType.LineUp:
                     navigator = new LineUpNavigator();
