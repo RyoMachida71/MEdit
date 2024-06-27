@@ -11,13 +11,13 @@ namespace MEdit_wpf.CaretNavigators {
             var lastLine = document.Lines.Last();
             if (currentPosition == new TextPosition(lastLine.LineNumber, lastLine.Length)) return currentPosition;
 
-            var currentLine = document.Lines[currentPosition.Row];
-            if (currentPosition.Column == currentLine.Length) return new TextPosition(currentPosition.Row + 1, 0);
+            var line = document.Lines[currentPosition.Row];
+            if (currentPosition.Column == line.Length) return new TextPosition(currentPosition.Row + 1, 0);
 
             _currentPosition = currentPosition;
             _document = document;
-            if (char.IsWhiteSpace(currentLine.Text[currentPosition.Column])) {
-                return GetNextPositionInternal((char target) => !char.IsWhiteSpace(target) || char.IsControl(target)); // todo: わかりづらいのでプライベートメソッドに切り出して名前をつける
+            if (char.IsWhiteSpace(line.Text[currentPosition.Column])) {
+                return GetNextPositionInternal((char target) => !char.IsWhiteSpace(target) || char.IsControl(target));
             } else {
                 return GetNextPositionInternal((char target) => !char.IsLetterOrDigit(target) || char.IsControl(target));
             }
