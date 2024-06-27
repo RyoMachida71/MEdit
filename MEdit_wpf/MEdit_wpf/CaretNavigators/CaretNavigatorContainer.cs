@@ -20,7 +20,7 @@ namespace MEdit_wpf.CaretNavigators {
                     navigator = new WordLeftNavigator();
                     break;
                 case CaretMovementType.WordRight:
-                    
+                    navigator = new WordRightNavigator();
                     break;
                 case CaretMovementType.LineUp:
                     navigator = new LineUpNavigator();

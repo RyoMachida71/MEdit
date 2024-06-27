@@ -82,6 +82,7 @@
     <Compile Include="CaretNavigators\LineUpNavigator.cs" />
     <Compile Include="CaretNavigators\NullNavigator.cs" />
     <Compile Include="CaretNavigators\WordLeftNavigator.cs" />
+    <Compile Include="CaretNavigators\WordRightNavigator.cs" />
     <Compile Include="Caret\SingleCaret.cs" />
     <Compile Include="CommandBinder.cs" />
     <Compile Include="CaretNavigators\CaretMovementType.cs" />
