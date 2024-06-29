@@ -18,7 +18,7 @@ namespace MEdit_wpf.CaretNavigators {
 
                 if (char.IsWhiteSpace(line.Text[column])) continue;
 
-                if (!char.IsLetterOrDigit(line.Text[column + 1])) {
+                if (column + 1 == line.Length || !char.IsLetterOrDigit(line.Text[column + 1])) {
                     return new TextPosition(line.LineNumber, column + 1);
                 }
             }

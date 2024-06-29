@@ -25,6 +25,14 @@ namespace MEdit_Test.TestCaretNavigators {
         }
 
         [Test]
+        public void TestReturnsPreviousLineStart() {
+            var doc = new TextDocument("test    \r\ntest.test");
+            var navigator = new WordLeftNavigator();
+            var position = navigator.GetNextPosition(new TextPosition(1, 0), doc);
+            Assert.That(position, Is.EqualTo(new TextPosition(0, 0)));
+        }
+
+        [Test]
         public void TestWordLeftSkipsConsecutiveNoDigitsOrLettersUntilLineStart() {
             var doc = new TextDocument("test   \r\n     test");
             var navigator = new WordLeftNavigator();
