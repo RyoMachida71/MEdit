@@ -13,11 +13,11 @@ namespace MEdit_Test.TestCaretNavigators {
         }
 
         [Test]
-        public void TestWordRightSkipsConsecutiveNoDigitsOrLetters() {
-            var doc = new TextDocument("test   \r\n     test");
+        public void TestReturnsNextLineStopPositionAtLineEnd() {
+            var doc = new TextDocument("test\r\ntest.test");
             var navigator = new WordRightNavigator();
             var position = navigator.GetNextPosition(new TextPosition(0, 4), doc);
-            Assert.That(position, Is.EqualTo(new TextPosition(1, 5)));
+            Assert.That(position, Is.EqualTo(new TextPosition(1, 4)));
         }
 
         [Test]
@@ -26,18 +26,14 @@ namespace MEdit_Test.TestCaretNavigators {
             var navigator = new WordRightNavigator();
             var position = navigator.GetNextPosition(new TextPosition(1, 0), doc);
             Assert.That(position, Is.EqualTo(new TextPosition(1, 2)));
-
-            doc = new TextDocument("test   \r\n  \t   test");
-            position = navigator.GetNextPosition(new TextPosition(0, 4), doc);
-            Assert.That(position, Is.EqualTo(new TextPosition(1, 2)));
         }
 
         [Test]
-        public void TestReturnsdocumentEndIFStopPositionDoesNotExists() {
+        public void TestReturnsLinetEndIFStopPositionDoesNotExists() {
             var doc = new TextDocument("test   \r\n   ");
             var navigator = new WordRightNavigator();
             var position = navigator.GetNextPosition(new TextPosition(0, 4), doc);
-            Assert.That(position, Is.EqualTo(new TextPosition(1, 3)));
+            Assert.That(position, Is.EqualTo(new TextPosition(0, 7)));
         }
 
         [Test]
@@ -46,14 +42,6 @@ namespace MEdit_Test.TestCaretNavigators {
             var navigator = new WordRightNavigator();
             var position = navigator.GetNextPosition(new TextPosition(1, 9), doc);
             Assert.That(position, Is.EqualTo(new TextPosition(1, 9)));
-        }
-
-        [Test]
-        public void TestReturnsNextLineStartAtLineEnd() {
-            var doc = new TextDocument("test\r\ntest.test");
-            var navigator = new WordRightNavigator();
-            var position = navigator.GetNextPosition(new TextPosition(0, 4), doc);
-            Assert.That(position, Is.EqualTo(new TextPosition(1, 0)));
         }
     }
 }

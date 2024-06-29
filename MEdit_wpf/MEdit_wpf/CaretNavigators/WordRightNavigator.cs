@@ -1,41 +1,29 @@
 ﻿using MEdit_wpf.Caret;
 using MEdit_wpf.Document;
-using System;
 using System.Linq;
 
 namespace MEdit_wpf.CaretNavigators {
     internal class WordRightNavigator : ICaretNavigator {
-        private TextPosition _currentPosition;
-        private ITextDocument _document;
+
         public TextPosition GetNextPosition(TextPosition currentPosition, ITextDocument document) {
             var lastLine = document.Lines.Last();
             if (currentPosition == new TextPosition(lastLine.LineNumber, lastLine.Length)) return currentPosition;
 
-            var line = document.Lines[currentPosition.Row];
-            if (currentPosition.Column == line.Length) return new TextPosition(currentPosition.Row + 1, 0);
+            var isLineEnd = currentPosition.Column == document.Lines[currentPosition.Row].Length;
+            var line = isLineEnd ? document.Lines[currentPosition.Row + 1] : document.Lines[currentPosition.Row];
+            var parsingPosition = isLineEnd ? new TextPosition(line.LineNumber, 0) : currentPosition;
 
-            _currentPosition = currentPosition;
-            _document = document;
-            if (char.IsWhiteSpace(line.Text[currentPosition.Column])) {
-                return GetNextPositionInternal((char target) => !char.IsWhiteSpace(target) || char.IsControl(target));
-            } else {
-                return GetNextPositionInternal((char target) => !char.IsLetterOrDigit(target) || char.IsControl(target));
-            }
-        }
+            for ( var column = parsingPosition.Column; column <= line.Length; ++column) {
+                if (column == line.Length) return new TextPosition(line.LineNumber, line.Length);
 
-        private TextPosition GetNextPositionInternal(Func<char, bool> shoulStop) {
-            for (var row = _currentPosition.Row; row < _document.Lines.Count; ++row) {
-                var line = _document.Lines[row];
-                var startColumn = row == _currentPosition.Row ? _currentPosition.Column : 0;
-                for (int column = startColumn; column < line.Length; ++column) {
-                    if (shoulStop(line.Text[column])) {
-                        return new TextPosition(row, column);
-                    }
+                if (char.IsWhiteSpace(line.Text[column])) continue;
+
+                if (!char.IsLetterOrDigit(line.Text[column + 1])) {
+                    return new TextPosition(line.LineNumber, column + 1);
                 }
             }
 
-            var lastLine = _document.Lines.Last();
-            return new TextPosition(lastLine.LineNumber, lastLine.Length);
+            return TextPosition.Empty;
         }
     }
 }
