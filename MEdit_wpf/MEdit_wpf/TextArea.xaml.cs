@@ -78,78 +78,109 @@ namespace MEdit_wpf {
         private bool _canHorizontallyScroll;
         public bool CanHorizontallyScroll { get => _canHorizontallyScroll; set => _canHorizontallyScroll = value; }
 
-        public double ExtentWidth => throw new System.NotImplementedException();
+        public double ExtentWidth => this.ActualWidth;
 
-        public double ExtentHeight => throw new System.NotImplementedException();
+        public double ExtentHeight => this.ActualWidth;
 
-        public double ViewportWidth => throw new System.NotImplementedException();
+        public double ViewportWidth => this.ActualWidth;
 
-        public double ViewportHeight => throw new System.NotImplementedException();
+        public double ViewportHeight => this.ActualWidth;
 
-        public double HorizontalOffset => throw new System.NotImplementedException();
+        private double _horizontalOffset;
+        public double HorizontalOffset => _horizontalOffset;
 
-        public double VerticalOffset => throw new System.NotImplementedException();
+        private double _verticalOffset;
+        public double VerticalOffset => _verticalOffset;
 
-        public ScrollViewer ScrollOwner { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        ScrollViewer _scrollViewer;
+        public ScrollViewer ScrollOwner {
+            get {
+                var parent = VisualTreeHelper.GetParent(this);
+                if (parent is ScrollViewer scrollViewer) {
+                    _scrollViewer = scrollViewer;
+                }
+                return _scrollViewer;
+            }
+            set { _scrollViewer = value; }
+        }
 
         public void LineUp() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_verticalOffset - _visualText.LineHeight);
         }
 
         public void LineDown() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_verticalOffset + _visualText.LineHeight);
         }
 
         public void LineLeft() {
-            throw new System.NotImplementedException();
+            this.SetHorizontalOffset(_horizontalOffset - _visualText.CharWidth);
         }
 
         public void LineRight() {
-            throw new System.NotImplementedException();
+            this.SetHorizontalOffset(_horizontalOffset + _visualText.CharWidth);
         }
 
         public void PageUp() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_verticalOffset - this.ViewportHeight);
         }
 
         public void PageDown() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_verticalOffset + this.ViewportHeight);
         }
 
         public void PageLeft() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_horizontalOffset - this.ViewportWidth);
         }
 
         public void PageRight() {
-            throw new System.NotImplementedException();
+            this.SetVerticalOffset(_horizontalOffset + this.ViewportWidth);
         }
 
+        // ----仮実装----
         public void MouseWheelUp() {
-            throw new System.NotImplementedException();
+            this.LineUp();
         }
 
         public void MouseWheelDown() {
-            throw new System.NotImplementedException();
+            this.LineDown();
         }
 
         public void MouseWheelLeft() {
-            throw new System.NotImplementedException();
+            this.LineLeft();
         }
 
         public void MouseWheelRight() {
-            throw new System.NotImplementedException();
+            this.LineRight();
         }
-
+        // --------------
         public void SetHorizontalOffset(double offset) {
-            throw new System.NotImplementedException();
+            _horizontalOffset = offset;
+            OnScrollChange();
         }
 
         public void SetVerticalOffset(double offset) {
-            throw new System.NotImplementedException();
+            _verticalOffset = offset;
+            OnScrollChange();
         }
 
         public Rect MakeVisible(Visual visual, Rect rectangle) {
-            throw new System.NotImplementedException();
+            // todo: 仮実装
+            return rectangle;
+            /*
+            if (rectangle.IsEmpty || visual == null || visual == this || !this.IsAncestorOf(visual)) {
+                return Rect.Empty;
+            }
+            GeneralTransform childTransform = visual.TransformToAncestor(this);
+            rectangle = childTransform.TransformBounds(rectangle);
+
+            MakeVisible(Rect.Offset(rectangle, scrollOffset));
+
+            return rectangle;
+            */
+        }
+
+        private void OnScrollChange() {
+            this.ScrollOwner?.InvalidateScrollInfo();
         }
     }
 }

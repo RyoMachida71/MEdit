@@ -19,22 +19,26 @@ namespace MEdit_wpf {
 
         private double _lineYPos = 0;
 
-        private double _lineHeight = 0;
+        private TextRunProperties _textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
 
         public VisualText()
         {
-            _lineHeight = CalcLineHeight();
+            this.LineHeight = CalcLineHeight();
+            this.CharWidth = _textRunProperty.FontHintingEmSize;
         }
+
+        public double LineHeight { get; private set; }
+
+        public double CharWidth { get; private set; }
 
         private double CalcLineHeight()
         {
             var formatter = TextFormatter.Create();
-            var textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
-            var textRun = new PlainTextSource("aaa", textRunProperty);
+            var textRun = new PlainTextSource("a", _textRunProperty);
             var visualLine = formatter.FormatLine(textRun
                                             , 0
                                             , MaxParagraphWidth
-                                            , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
+                                            , new GeneralTextParagraphProperties(false, _textRunProperty, _textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                             , null);
             return visualLine.TextHeight;
         }
@@ -44,12 +48,11 @@ namespace MEdit_wpf {
             _lineYPos = 0;
             foreach (var line in textLines) {
                 var formatter = TextFormatter.Create();
-                var textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
-                var textRun = new PlainTextSource(line.Text, textRunProperty);
+                var textRun = new PlainTextSource(line.Text, _textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
                                                 , 0
                                                 , MaxParagraphWidth
-                                                , new GeneralTextParagraphProperties(false, textRunProperty, textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
+                                                , new GeneralTextParagraphProperties(false, _textRunProperty, _textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                                 , null);
                 visualLine.Draw(dc, new Point(0, _lineYPos), InvertAxes.None);
                 _lineYPos += visualLine.TextHeight;
@@ -99,7 +102,7 @@ namespace MEdit_wpf {
                     var nextPosition = GetCaretScreenPosition(new TextPosition(row, col));
                     var xPos = Math.Min(position.X, nextPosition.X);
                     var width = Math.Abs(position.X - nextPosition.X);
-                    rects.Add(new Rect(xPos, position.Y, width, _lineHeight));
+                    rects.Add(new Rect(xPos, position.Y, width, this.LineHeight));
                     position = nextPosition;
                 }
             }
@@ -123,7 +126,7 @@ namespace MEdit_wpf {
                     var nextPosition = GetCaretScreenPosition(new TextPosition(row, col));
                     var xPos = Math.Min(position.X, nextPosition.X);
                     var width = Math.Abs(position.X - nextPosition.X);
-                    rects.Add(new Rect(xPos, position.Y, width, _lineHeight));
+                    rects.Add(new Rect(xPos, position.Y, width, this.LineHeight));
                     position = nextPosition;
                 }
             }
