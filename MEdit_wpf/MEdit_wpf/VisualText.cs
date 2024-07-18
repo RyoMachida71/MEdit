@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
@@ -30,6 +31,10 @@ namespace MEdit_wpf {
         public double LineHeight { get; private set; }
 
         public double CharWidth { get; private set; }
+
+        public double TotalLineHeight => _visualLines.Sum(x => x.Height);
+
+        public double MaxLineWidth => _visualLines.Max(x => x.WidthIncludingTrailingWhitespace);
 
         private double CalcLineHeight()
         {

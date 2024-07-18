@@ -78,13 +78,13 @@ namespace MEdit_wpf {
         private bool _canHorizontallyScroll;
         public bool CanHorizontallyScroll { get => _canHorizontallyScroll; set => _canHorizontallyScroll = value; }
 
-        public double ExtentWidth => this.ActualWidth;
+        public double ExtentWidth => _visualText.MaxLineWidth;
 
-        public double ExtentHeight => this.ActualWidth;
+        public double ExtentHeight => _visualText.TotalLineHeight;
 
         public double ViewportWidth => this.ActualWidth;
 
-        public double ViewportHeight => this.ActualWidth;
+        public double ViewportHeight => this.Height;
 
         private double _horizontalOffset;
         public double HorizontalOffset => _horizontalOffset;
@@ -92,17 +92,7 @@ namespace MEdit_wpf {
         private double _verticalOffset;
         public double VerticalOffset => _verticalOffset;
 
-        ScrollViewer _scrollViewer;
-        public ScrollViewer ScrollOwner {
-            get {
-                var parent = VisualTreeHelper.GetParent(this);
-                if (parent is ScrollViewer scrollViewer) {
-                    _scrollViewer = scrollViewer;
-                }
-                return _scrollViewer;
-            }
-            set { _scrollViewer = value; }
-        }
+        public ScrollViewer ScrollOwner { get; set; }
 
         public void LineUp() {
             this.SetVerticalOffset(_verticalOffset - _visualText.LineHeight);
@@ -164,19 +154,32 @@ namespace MEdit_wpf {
         }
 
         public Rect MakeVisible(Visual visual, Rect rectangle) {
-            // todo: 仮実装
-            return rectangle;
-            /*
             if (rectangle.IsEmpty || visual == null || visual == this || !this.IsAncestorOf(visual)) {
                 return Rect.Empty;
             }
+
             GeneralTransform childTransform = visual.TransformToAncestor(this);
             rectangle = childTransform.TransformBounds(rectangle);
 
-            MakeVisible(Rect.Offset(rectangle, scrollOffset));
+            double offsetX = CalculateOffset(HorizontalOffset, rectangle.Left, rectangle.Right, ViewportWidth);
+            double offsetY = CalculateOffset(VerticalOffset, rectangle.Top, rectangle.Bottom, ViewportHeight);
+
+            SetHorizontalOffset(offsetX);
+            SetVerticalOffset(offsetY);
 
             return rectangle;
-            */
+        }
+
+        private double CalculateOffset(double currentOffset, double start, double end, double viewport) {
+            double newOffset = currentOffset;
+
+            if (end > currentOffset + viewport) {
+                newOffset = end - viewport;
+            } else if (start < currentOffset) {
+                newOffset = start;
+            }
+
+            return newOffset;
         }
 
         private void OnScrollChange() {
