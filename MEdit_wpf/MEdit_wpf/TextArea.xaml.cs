@@ -58,6 +58,7 @@ namespace MEdit_wpf {
             base.OnRender(dc);
             _visualText.DrawVisualLines(dc, _document.Lines);
             RenderCaret();
+            OnScrollChange();
         }
 
         protected override Visual GetVisualChild(int index) {
