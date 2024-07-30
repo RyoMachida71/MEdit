@@ -1,6 +1,9 @@
 ﻿using MEdit_wpf.Caret;
 using MEdit_wpf.Document;
 using MEdit_wpf.Layer;
+using System;
+using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -38,6 +41,10 @@ namespace MEdit_wpf {
             this.InvalidateVisual();
         }
 
+        private void RenderCaret() {
+            _caretLayer.Render(_visualText.GetCaretScreenPosition(_caret.Position), _visualText.GetSelectionScreenRects(_caret.Selection, _document));
+        }
+
         protected override int VisualChildrenCount => 1;
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
@@ -61,6 +68,14 @@ namespace MEdit_wpf {
                     return base.GetVisualChild(index);
             }
         }
+        protected override Size MeasureOverride(Size availableSize) {
+            return base.MeasureOverride(availableSize);
+        }
+
+        protected override Size ArrangeOverride(Size finalSize) {
+            return base.ArrangeOverride(finalSize);
+        }
+
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
             if (this.IsFocused) {
@@ -68,15 +83,9 @@ namespace MEdit_wpf {
             }
         }
 
-        private void RenderCaret() {
-            _caretLayer.Render(_visualText.GetCaretScreenPosition(_caret.Position), _visualText.GetSelectionScreenRects(_caret.Selection, _document));
-        }
+        public bool CanVerticallyScroll { get; set; }
 
-        private bool _canVerticallyScroll;
-        public bool CanVerticallyScroll { get => _canVerticallyScroll; set => _canVerticallyScroll = value; }
-
-        private bool _canHorizontallyScroll;
-        public bool CanHorizontallyScroll { get => _canHorizontallyScroll; set => _canHorizontallyScroll = value; }
+        public bool CanHorizontallyScroll { get; set; }
 
         public double ExtentWidth => _visualText.MaxLineWidth;
 
@@ -84,7 +93,7 @@ namespace MEdit_wpf {
 
         public double ViewportWidth => this.ActualWidth;
 
-        public double ViewportHeight => this.Height;
+        public double ViewportHeight => this.ActualHeight;
 
         private double _horizontalOffset;
         public double HorizontalOffset => _horizontalOffset;
@@ -119,14 +128,13 @@ namespace MEdit_wpf {
         }
 
         public void PageLeft() {
-            this.SetVerticalOffset(_horizontalOffset - this.ViewportWidth);
+            this.SetHorizontalOffset(_horizontalOffset - this.ViewportWidth);
         }
 
         public void PageRight() {
-            this.SetVerticalOffset(_horizontalOffset + this.ViewportWidth);
+            this.SetHorizontalOffset(_horizontalOffset + this.ViewportWidth);
         }
 
-        // ----仮実装----
         public void MouseWheelUp() {
             this.LineUp();
         }
@@ -142,15 +150,23 @@ namespace MEdit_wpf {
         public void MouseWheelRight() {
             this.LineRight();
         }
-        // --------------
+
         public void SetHorizontalOffset(double offset) {
-            _horizontalOffset = offset;
-            OnScrollChange();
+            offset = Math.Max(0, Math.Min(offset, ExtentWidth - ViewportWidth));
+            if (offset != _horizontalOffset) {
+                _horizontalOffset = offset;
+                this.InvalidateArrange();
+                OnScrollChange();
+            }
         }
 
         public void SetVerticalOffset(double offset) {
-            _verticalOffset = offset;
-            OnScrollChange();
+            offset = Math.Max(0, Math.Min(offset, ExtentHeight - ViewportHeight));
+            if (offset != _verticalOffset) {
+                _verticalOffset = offset;
+                this.InvalidateArrange();
+                OnScrollChange();
+            }
         }
 
         public Rect MakeVisible(Visual visual, Rect rectangle) {
@@ -158,8 +174,7 @@ namespace MEdit_wpf {
                 return Rect.Empty;
             }
 
-            GeneralTransform childTransform = visual.TransformToAncestor(this);
-            rectangle = childTransform.TransformBounds(rectangle);
+            rectangle = visual.TransformToAncestor(this).TransformBounds(rectangle);
 
             double offsetX = CalculateOffset(HorizontalOffset, rectangle.Left, rectangle.Right, ViewportWidth);
             double offsetY = CalculateOffset(VerticalOffset, rectangle.Top, rectangle.Bottom, ViewportHeight);

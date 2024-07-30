@@ -20,7 +20,7 @@ namespace MEdit_wpf {
 
         private double _lineYPos = 0;
 
-        private TextRunProperties _textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.White, CultureInfo.InvariantCulture);
+        private TextRunProperties _textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.Transparent, CultureInfo.InvariantCulture);
 
         public VisualText()
         {
@@ -32,7 +32,7 @@ namespace MEdit_wpf {
 
         public double CharWidth { get; private set; }
 
-        public double TotalLineHeight => _visualLines.Sum(x => x.Height);
+        public double TotalLineHeight => _visualLines.Sum(x => x.TextHeight);
 
         public double MaxLineWidth => _visualLines.Max(x => x.WidthIncludingTrailingWhitespace);
 
