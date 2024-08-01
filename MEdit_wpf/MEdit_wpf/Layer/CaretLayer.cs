@@ -1,34 +1,29 @@
 ﻿using System.Windows;
-using System.Collections.Immutable;
-using System.Collections.Generic;
 using System.Windows.Media;
 
-
 namespace MEdit_wpf.Layer {
-    public class CaretLayer : FrameworkElement, ICaretLayer {
-        private Point _renderPos;
-        private IImmutableList<Rect> _selectionRects = new List<Rect>().ToImmutableList();
-
+    public class CaretLayer : FrameworkElement, IVisualLayer {
         private const double CaretWidth = 2;
-        private double CaretHeight = 12;
+
+        private ITextArea _textArea;
         private Brush ForeGround = Brushes.Black;
         private Brush SelectionBrush = new SolidColorBrush(Color.FromArgb(64, 0, 0, 255));
 
-        public CaretLayer()
+
+        public CaretLayer(ITextArea textArea)
         {
+            _textArea = textArea;
         }
 
-        public void Render(Point pos, IImmutableList<Rect> selectionRects) {
-            _renderPos = pos;
-            _selectionRects = selectionRects;
-            InvalidateVisual();
-        }
+        public void Render() => InvalidateVisual();
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            dc.DrawRectangle(ForeGround, null, new Rect(_renderPos.X, _renderPos.Y, CaretWidth, CaretHeight));
 
-            foreach (var rect in _selectionRects)
+            var caretScreenPosition = _textArea.VisualText.GetCaretScreenPosition(_textArea.Caret.Position);
+            dc.DrawRectangle(ForeGround, null, new Rect(caretScreenPosition.X, caretScreenPosition.Y, CaretWidth, _textArea.VisualText.LineHeight));
+
+            foreach (var rect in _textArea.VisualText.GetSelectionScreenRects(_textArea.Caret.Selection, _textArea.Document))
             {
                 dc.DrawRectangle(SelectionBrush, null, rect);
             }

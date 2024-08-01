@@ -2,8 +2,6 @@
 using MEdit_wpf.Document;
 using MEdit_wpf.Layer;
 using System;
-using System.Diagnostics;
-using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -25,8 +23,8 @@ namespace MEdit_wpf {
             InitializeComponent();
             _document = new TextDocument();
             _visualText = new VisualText();
-            _caret = new SingleCaret(this, RenderCaret);
-            _caretLayer = new CaretLayer();
+            _caretLayer = new CaretLayer(this);
+            _caret = new SingleCaret(this, _caretLayer.Render);
 
             AddVisualChild(_caretLayer);
             CommandBinder.SetBinding(this, this.CommandBindings, this.InputBindings);
@@ -34,7 +32,9 @@ namespace MEdit_wpf {
 
         public ITextDocument Document => _document;
 
-        public SingleCaret Caret => _caret;
+        public ICaret Caret => _caret;
+
+        public VisualText VisualText => _visualText;
 
         public void DeleteText(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
@@ -42,7 +42,7 @@ namespace MEdit_wpf {
         }
 
         private void RenderCaret() {
-            _caretLayer.Render(_visualText.GetCaretScreenPosition(_caret.Position), _visualText.GetSelectionScreenRects(_caret.Selection, _document));
+            _caretLayer.Render();
         }
 
         protected override int VisualChildrenCount => 1;

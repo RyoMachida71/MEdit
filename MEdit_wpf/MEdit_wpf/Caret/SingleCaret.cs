@@ -1,11 +1,9 @@
-﻿using MEdit_wpf.CaretNavigators;
-using MEdit_wpf.Document;
+﻿using MEdit_wpf.Document;
 using MEdit_wpf.Selection;
 using System;
-using System.Linq;
 
 namespace MEdit_wpf.Caret {
-    public class SingleCaret {
+    public class SingleCaret : ICaret {
 
         private ITextArea _textArea;
 

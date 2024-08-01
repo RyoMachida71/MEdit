@@ -83,6 +83,7 @@
     <Compile Include="CaretNavigators\NullNavigator.cs" />
     <Compile Include="CaretNavigators\WordLeftNavigator.cs" />
     <Compile Include="CaretNavigators\WordRightNavigator.cs" />
+    <Compile Include="Caret\ICaret.cs" />
     <Compile Include="Caret\SingleCaret.cs" />
     <Compile Include="CommandBinder.cs" />
     <Compile Include="CaretNavigators\CaretMovementType.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Document\DocumentChangedEventArgs.cs" />
     <Compile Include="Document\DocumentLine.cs" />
     <Compile Include="EditingDirection.cs" />
+    <Compile Include="TextRendering\DrawingTextVisual.cs" />
     <Compile Include="TextRendering\GeneralTextMarkerProperties.cs" />
     <Compile Include="TextRendering\GeneralTextParagraphProperties.cs" />
     <Compile Include="ITextArea.cs" />

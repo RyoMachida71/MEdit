@@ -28,6 +28,8 @@ namespace MEdit_wpf {
             this.CharWidth = _textRunProperty.FontHintingEmSize;
         }
 
+        public List<TextLine> VisualTextLines => _visualLines;
+
         public double LineHeight { get; private set; }
 
         public double CharWidth { get; private set; }

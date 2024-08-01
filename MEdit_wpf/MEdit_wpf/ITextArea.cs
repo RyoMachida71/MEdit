@@ -6,6 +6,7 @@ namespace MEdit_wpf
     public interface ITextArea
     {
         ITextDocument Document { get; }
-        SingleCaret Caret { get; }
+        ICaret Caret { get; }
+        VisualText VisualText { get; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Windows;
 
 namespace MEdit_wpf.Layer {
-    public interface ICaretLayer {
-        void Render(Point pos, IImmutableList<Rect> selectionRects);
+    public interface IVisualLayer {
+        void Render();
     }
 }
