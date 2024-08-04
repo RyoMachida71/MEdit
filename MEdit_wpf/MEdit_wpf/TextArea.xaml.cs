@@ -17,6 +17,7 @@ namespace MEdit_wpf {
         private TextDocument _document;
         private SingleCaret _caret;
         private CaretLayer _caretLayer;
+        private TextLayer _textLayer;
         private VisualText _visualText;
 
         public TextArea() {
@@ -26,8 +27,10 @@ namespace MEdit_wpf {
             _caretLayer = new CaretLayer(this);
             _caret = new SingleCaret(this, _caretLayer.Render);
 
+            _textLayer = new TextLayer(this, this);
+            AddVisualChild(_textLayer);
             AddVisualChild(_caretLayer);
-            CommandBinder.SetBinding(this, this.CommandBindings, this.InputBindings);
+            CommandBinder.SetBinding(this);
         }
 
         public ITextDocument Document => _document;
@@ -36,47 +39,48 @@ namespace MEdit_wpf {
 
         public VisualText VisualText => _visualText;
 
-        public void DeleteText(EditingDirection direction) {
-            _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
-            this.InvalidateVisual();
-        }
-
-        private void RenderCaret() {
-            _caretLayer.Render();
-        }
-
-        protected override int VisualChildrenCount => 1;
-
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             var input = new TextInput(e.Text);
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
-            this.InvalidateVisual();
+            _visualText.BuildVisualLines(_document.Lines);
+            this.InvalidateLayers();
+        }
+        public void OnTextDelete(EditingDirection direction) {
+            _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
+            _visualText.BuildVisualLines(_document.Lines);
+            this.InvalidateLayers();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            _visualText.DrawVisualLines(dc, _document.Lines);
-            RenderCaret();
-            OnScrollChange();
+            this.InvalidateLayers();
         }
+
+        protected override Size ArrangeOverride(Size arrangeBounds) {
+            _textLayer.Arrange(new Rect(0, 0, arrangeBounds.Width, arrangeBounds.Height));
+            _caretLayer.Arrange(new Rect(0, 0, arrangeBounds.Width, arrangeBounds.Height));
+            return arrangeBounds;
+        }
+
+        protected override int VisualChildrenCount => 2;
 
         protected override Visual GetVisualChild(int index) {
             switch (index) {
+                case (int)LayerKind.Text:
+                    return _textLayer;
                 case (int)LayerKind.Caret:
                     return _caretLayer;
                 default:
                     return base.GetVisualChild(index);
             }
         }
-        protected override Size MeasureOverride(Size availableSize) {
-            return base.MeasureOverride(availableSize);
-        }
 
-        protected override Size ArrangeOverride(Size finalSize) {
-            return base.ArrangeOverride(finalSize);
-        }
+        private void InvalidateLayers() {
 
+            _textLayer.Render();
+            _caretLayer.Render();
+        }
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
             if (this.IsFocused) {

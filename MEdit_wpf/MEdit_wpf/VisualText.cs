@@ -28,7 +28,7 @@ namespace MEdit_wpf {
             this.CharWidth = _textRunProperty.FontHintingEmSize;
         }
 
-        public List<TextLine> VisualTextLines => _visualLines;
+        public IImmutableList<TextLine> VisualTextLines => _visualLines.ToImmutableList();
 
         public double LineHeight { get; private set; }
 
@@ -41,19 +41,20 @@ namespace MEdit_wpf {
         private double CalcLineHeight()
         {
             var formatter = TextFormatter.Create();
-            var textRun = new PlainTextSource("a", _textRunProperty);
+            var textRun = new PlainTextSource("", _textRunProperty);
             var visualLine = formatter.FormatLine(textRun
                                             , 0
                                             , MaxParagraphWidth
                                             , new GeneralTextParagraphProperties(false, _textRunProperty, _textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                             , null);
+            _visualLines.Add(visualLine);
             return visualLine.TextHeight;
         }
 
-        public void DrawVisualLines(DrawingContext dc, IImmutableList<DocumentLine> textLines) {
+        public void BuildVisualLines(IImmutableList<DocumentLine> documentLines) {
             _visualLines.Clear();
             _lineYPos = 0;
-            foreach (var line in textLines) {
+            foreach (var line in documentLines) {
                 var formatter = TextFormatter.Create();
                 var textRun = new PlainTextSource(line.Text, _textRunProperty);
                 var visualLine = formatter.FormatLine(textRun
@@ -61,7 +62,6 @@ namespace MEdit_wpf {
                                                 , MaxParagraphWidth
                                                 , new GeneralTextParagraphProperties(false, _textRunProperty, _textRunProperty.FontHintingEmSize, new GeneralTextMarkerProperties(0, textRun))
                                                 , null);
-                visualLine.Draw(dc, new Point(0, _lineYPos), InvertAxes.None);
                 _lineYPos += visualLine.TextHeight;
 
                 _visualLines.Add(visualLine);

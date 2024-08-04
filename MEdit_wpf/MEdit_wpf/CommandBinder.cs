@@ -13,10 +13,10 @@ namespace MEdit_wpf {
 
         private static List<InputBinding> _inputs = new List<InputBinding>();
 
-        public static void SetBinding(TextArea textArea, CommandBindingCollection commands, InputBindingCollection inputs) {
+        public static void SetBinding(TextArea textArea) {
             _textArea = textArea;
-            commands.AddRange(_commands);
-            inputs.AddRange(_inputs);
+            _textArea.CommandBindings.AddRange(_commands);
+            _textArea.InputBindings.AddRange(_inputs);
         }
 
         private static void AddBinding(ICommand command, ModifierKeys modifier, Key key, ExecutedRoutedEventHandler handler) {
@@ -76,7 +76,7 @@ namespace MEdit_wpf {
 
         private static ExecutedRoutedEventHandler OnDeleteText(EditingDirection direction) {
             return (s, e) => {
-                _textArea.DeleteText(direction);
+                _textArea.OnTextDelete(direction);
             };
         }
     }
