@@ -45,16 +45,19 @@ namespace MEdit_wpf {
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
             _visualText.BuildVisualLines(_document.Lines);
             this.InvalidateLayers();
+            this.OnScrollChange();
         }
         public void OnTextDelete(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
             _visualText.BuildVisualLines(_document.Lines);
             this.InvalidateLayers();
+            this.OnScrollChange();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
             this.InvalidateLayers();
+            this.OnScrollChange();
         }
 
         protected override Size ArrangeOverride(Size arrangeBounds) {
