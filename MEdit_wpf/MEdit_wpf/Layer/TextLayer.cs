@@ -23,7 +23,7 @@ namespace MEdit_wpf.Layer {
             this.RemoveVisualChild(_drawingTextVisual);
             _drawingTextVisual = new DrawingTextVisual().Create(_textArea);
             this.AddVisualChild(_drawingTextVisual);
-            _drawingTextVisual.Transform = new TranslateTransform(_scrollInfo.HorizontalOffset, _scrollInfo.VerticalOffset);
+            _drawingTextVisual.Transform = new TranslateTransform(-_scrollInfo.HorizontalOffset, -_scrollInfo.VerticalOffset);
         }
 
         protected override int VisualChildrenCount => 1;

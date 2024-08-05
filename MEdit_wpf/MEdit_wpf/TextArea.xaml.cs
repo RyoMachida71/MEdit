@@ -24,7 +24,7 @@ namespace MEdit_wpf {
             InitializeComponent();
             _document = new TextDocument();
             _visualText = new VisualText();
-            _caretLayer = new CaretLayer(this);
+            _caretLayer = new CaretLayer(this, this);
             _caret = new SingleCaret(this, _caretLayer.Render);
 
             _textLayer = new TextLayer(this, this);
@@ -56,6 +56,8 @@ namespace MEdit_wpf {
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
+
+            _caretLayer.Render();
             this.InvalidateLayers();
             this.OnScrollChange();
         }
@@ -80,7 +82,6 @@ namespace MEdit_wpf {
         }
 
         private void InvalidateLayers() {
-
             _textLayer.Render();
             _caretLayer.Render();
         }
@@ -163,7 +164,6 @@ namespace MEdit_wpf {
             offset = Math.Max(0, Math.Min(offset, ExtentWidth - ViewportWidth));
             if (offset != _horizontalOffset) {
                 _horizontalOffset = offset;
-                this.InvalidateArrange();
                 OnScrollChange();
             }
         }
@@ -172,7 +172,6 @@ namespace MEdit_wpf {
             offset = Math.Max(0, Math.Min(offset, ExtentHeight - ViewportHeight));
             if (offset != _verticalOffset) {
                 _verticalOffset = offset;
-                this.InvalidateArrange();
                 OnScrollChange();
             }
         }
@@ -207,6 +206,7 @@ namespace MEdit_wpf {
 
         private void OnScrollChange() {
             this.ScrollOwner?.InvalidateScrollInfo();
+            this.InvalidateLayers();
         }
     }
 }

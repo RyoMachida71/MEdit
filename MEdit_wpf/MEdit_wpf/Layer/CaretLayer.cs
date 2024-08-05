@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace MEdit_wpf.Layer {
@@ -6,13 +7,15 @@ namespace MEdit_wpf.Layer {
         private const double CaretWidth = 2;
 
         private ITextArea _textArea;
+        private IScrollInfo _scrollInfo;
         private Brush ForeGround = Brushes.Black;
         private Brush SelectionBrush = new SolidColorBrush(Color.FromArgb(64, 0, 0, 255));
 
 
-        public CaretLayer(ITextArea textArea)
+        public CaretLayer(ITextArea textArea, IScrollInfo scrollInfo)
         {
             _textArea = textArea;
+            _scrollInfo = scrollInfo;
         }
 
         public void Render() => InvalidateVisual();
@@ -21,10 +24,11 @@ namespace MEdit_wpf.Layer {
             base.OnRender(dc);
 
             var caretScreenPosition = _textArea.VisualText.GetCaretScreenPosition(_textArea.Caret.Position);
-            dc.DrawRectangle(ForeGround, null, new Rect(caretScreenPosition.X, caretScreenPosition.Y, CaretWidth, _textArea.VisualText.LineHeight));
+            dc.DrawRectangle(ForeGround, null, new Rect(caretScreenPosition.X - _scrollInfo.HorizontalOffset, caretScreenPosition.Y - _scrollInfo.VerticalOffset, CaretWidth, _textArea.VisualText.LineHeight));
 
             foreach (var rect in _textArea.VisualText.GetSelectionScreenRects(_textArea.Caret.Selection, _textArea.Document))
             {
+                rect.Offset(new Vector(-_scrollInfo.HorizontalOffset, -_scrollInfo.VerticalOffset));
                 dc.DrawRectangle(SelectionBrush, null, rect);
             }
         }
