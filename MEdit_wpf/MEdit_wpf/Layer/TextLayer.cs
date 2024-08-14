@@ -12,6 +12,7 @@ namespace MEdit_wpf.Layer {
         public TextLayer(ITextArea textArea, IScrollInfo scrollInfo)
         {
             _textArea = textArea;
+            _textArea.ScrollOffsetChanged += (s, e) => this.InvalidateVisual();
             _scrollInfo = scrollInfo;
         }
 

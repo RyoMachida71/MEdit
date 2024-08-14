@@ -23,11 +23,10 @@ namespace MEdit_wpf {
         public TextArea() {
             InitializeComponent();
             _document = new TextDocument();
+            _textLayer = new TextLayer(this, this);
             _visualText = new VisualText();
             _caretLayer = new CaretLayer(this, this);
             _caret = new SingleCaret(this, _caretLayer.Render);
-
-            _textLayer = new TextLayer(this, this);
             AddVisualChild(_textLayer);
             AddVisualChild(_caretLayer);
             CommandBinder.SetBinding(this);
@@ -39,36 +38,34 @@ namespace MEdit_wpf {
 
         public VisualText VisualText => _visualText;
 
+        public event EventHandler ScrollOffsetChanged;
+
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
             var input = new TextInput(e.Text);
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
             _visualText.BuildVisualLines(_document.Lines);
-            this.InvalidateLayers();
             this.OnScrollChange();
         }
         public void OnTextDelete(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
             _visualText.BuildVisualLines(_document.Lines);
-            this.InvalidateLayers();
             this.OnScrollChange();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
 
-            _caretLayer.Render();
-            this.InvalidateLayers();
             this.OnScrollChange();
         }
 
-        protected override Size ArrangeOverride(Size arrangeBounds) {
-            _textLayer.Arrange(new Rect(0, 0, arrangeBounds.Width, arrangeBounds.Height));
-            _caretLayer.Arrange(new Rect(0, 0, arrangeBounds.Width, arrangeBounds.Height));
-            return arrangeBounds;
+        protected override Size ArrangeOverride(Size parentSize) {
+            _textLayer.Arrange(new Rect(0, 0, parentSize.Width, parentSize.Height));
+            _caretLayer.Arrange(new Rect(0, 0, parentSize.Width, parentSize.Height));
+            return parentSize;
         }
 
-        protected override int VisualChildrenCount => 2;
+        protected override int VisualChildrenCount => Enum.GetValues(typeof(LayerKind)).Length;
 
         protected override Visual GetVisualChild(int index) {
             switch (index) {
@@ -79,11 +76,6 @@ namespace MEdit_wpf {
                 default:
                     return base.GetVisualChild(index);
             }
-        }
-
-        private void InvalidateLayers() {
-            _textLayer.Render();
-            _caretLayer.Render();
         }
 
         private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
@@ -162,18 +154,18 @@ namespace MEdit_wpf {
 
         public void SetHorizontalOffset(double offset) {
             offset = Math.Max(0, Math.Min(offset, ExtentWidth - ViewportWidth));
-            if (offset != _horizontalOffset) {
-                _horizontalOffset = offset;
-                OnScrollChange();
-            }
+            if (offset == _horizontalOffset) return;
+
+            _horizontalOffset = offset;
+            OnScrollChange();
         }
 
         public void SetVerticalOffset(double offset) {
             offset = Math.Max(0, Math.Min(offset, ExtentHeight - ViewportHeight));
-            if (offset != _verticalOffset) {
-                _verticalOffset = offset;
-                OnScrollChange();
-            }
+            if (offset == _horizontalOffset) return;
+
+            _verticalOffset = offset;
+            OnScrollChange();
         }
 
         public Rect MakeVisible(Visual visual, Rect rectangle) {
@@ -206,7 +198,7 @@ namespace MEdit_wpf {
 
         private void OnScrollChange() {
             this.ScrollOwner?.InvalidateScrollInfo();
-            this.InvalidateLayers();
+            this.ScrollOffsetChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

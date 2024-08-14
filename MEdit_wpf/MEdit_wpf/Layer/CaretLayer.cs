@@ -15,10 +15,15 @@ namespace MEdit_wpf.Layer {
         public CaretLayer(ITextArea textArea, IScrollInfo scrollInfo)
         {
             _textArea = textArea;
+            _textArea.ScrollOffsetChanged += (s, e) => this.InvalidateVisual();
             _scrollInfo = scrollInfo;
         }
 
-        public void Render() => InvalidateVisual();
+        public void Render() {
+            // ここでscrollInfo.MakeVisible()を呼び出す
+            InvalidateVisual();
+        }
+    
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);

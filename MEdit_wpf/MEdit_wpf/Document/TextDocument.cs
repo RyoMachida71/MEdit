@@ -16,9 +16,12 @@ namespace MEdit_wpf.Document {
         private List<DocumentLine> _lines = new List<DocumentLine>();
 
         private StringBuilder _buffer;
+
         public TextDocument(string text = "") {
             _buffer = new StringBuilder(text);
         }
+
+        public event EventHandler<DocumentChangedEventArgs> DocumentChanged;
 
         public string Text {
             get { return _buffer.ToString(); }
@@ -42,8 +45,6 @@ namespace MEdit_wpf.Document {
                 return _lines.ToImmutableList();
             }
         }
-
-        public event EventHandler<DocumentChangedEventArgs> DocumentChanged;
 
         public void Replace(TextPosition start, TextPosition end, TextInput input) {
             (int startOffset, int endOffset) = GetOffsetRange(start, end);

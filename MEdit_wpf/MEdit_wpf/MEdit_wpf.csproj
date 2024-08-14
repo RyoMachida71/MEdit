@@ -97,7 +97,7 @@
     <Compile Include="ITextArea.cs" />
     <Compile Include="Document\ITextDocument.cs" />
     <Compile Include="Layer\CaretLayer.cs" />
-    <Compile Include="Layer\ICaretLayer.cs" />
+    <Compile Include="Layer\IVisualLayer.cs" />
     <Compile Include="Layer\LayerKind.cs" />
     <Compile Include="TextRendering\PlainTextRunProperty.cs" />
     <Compile Include="TextRendering\PlainTextSource.cs" />
