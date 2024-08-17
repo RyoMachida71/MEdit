@@ -6,8 +6,7 @@ namespace MEdit_wpf
     {
         public TextInput(string input)
         {
-            if (string.IsNullOrEmpty(input)) Value = "";
-            else Value = ConvertEol(input);
+            Value = string.IsNullOrEmpty(input) ? string.Empty : ConvertEol(input);
         }
 
         public string Value { get; private set; }
