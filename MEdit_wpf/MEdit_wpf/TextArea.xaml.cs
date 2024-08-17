@@ -26,7 +26,7 @@ namespace MEdit_wpf {
             _textLayer = new TextLayer(this, this);
             _visualText = new VisualText();
             _caretLayer = new CaretLayer(this, this);
-            _caret = new SingleCaret(this, _caretLayer.Render);
+            _caret = new SingleCaret(this, _caretLayer.BringCaretToView);
             AddVisualChild(_textLayer);
             AddVisualChild(_caretLayer);
             CommandBinder.SetBinding(this);
@@ -45,12 +45,12 @@ namespace MEdit_wpf {
             var input = new TextInput(e.Text);
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
             _visualText.BuildVisualLines(_document.Lines);
-            this.OnScrollChange();
+            _caretLayer.BringCaretToView();
         }
         public void OnTextDelete(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
             _visualText.BuildVisualLines(_document.Lines);
-            this.OnScrollChange();
+            _caretLayer.BringCaretToView();
         }
 
         protected override void OnRender(DrawingContext dc) {
@@ -173,27 +173,22 @@ namespace MEdit_wpf {
                 return Rect.Empty;
             }
 
-            rectangle = visual.TransformToAncestor(this).TransformBounds(rectangle);
-
-            double offsetX = CalculateOffset(HorizontalOffset, rectangle.Left, rectangle.Right, ViewportWidth);
-            double offsetY = CalculateOffset(VerticalOffset, rectangle.Top, rectangle.Bottom, ViewportHeight);
-
-            SetHorizontalOffset(offsetX);
-            SetVerticalOffset(offsetY);
-
-            return rectangle;
-        }
-
-        private double CalculateOffset(double currentOffset, double start, double end, double viewport) {
-            double newOffset = currentOffset;
-
-            if (end > currentOffset + viewport) {
-                newOffset = end - viewport;
-            } else if (start < currentOffset) {
-                newOffset = start;
+            var visibleRect = new Rect(_horizontalOffset, _verticalOffset, ViewportWidth, ViewportHeight);
+            if (rectangle.Left < visibleRect.Left) {
+                _horizontalOffset = rectangle.Left;
+            }
+            else if (rectangle.Right > visibleRect.Right) {
+                _horizontalOffset = rectangle.Right - this.ViewportWidth;
+            }
+            if (rectangle.Top < visibleRect.Top) {
+                _verticalOffset = rectangle.Top;
+            }
+            else if (rectangle.Bottom > visibleRect.Bottom) {
+                _verticalOffset = rectangle.Bottom - this.ViewportHeight;
             }
 
-            return newOffset;
+            OnScrollChange();
+            return rectangle;
         }
 
         private void OnScrollChange() {

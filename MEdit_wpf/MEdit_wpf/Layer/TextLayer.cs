@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
 
 namespace MEdit_wpf.Layer {
-    public class TextLayer : FrameworkElement, IVisualLayer {
+    public class TextLayer : FrameworkElement {
         private ITextArea _textArea;
         private IScrollInfo _scrollInfo;
         private DrawingTextVisual _drawingTextVisual;
