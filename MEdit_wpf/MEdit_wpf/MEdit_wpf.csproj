@@ -71,7 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CaretNavigators\CaretNavigatorContainer.cs" />
+    <Compile Include="CaretNavigators\CaretNavigatorFactory.cs" />
     <Compile Include="CaretNavigators\CharLeftNavigator.cs" />
     <Compile Include="CaretNavigators\CharRightNavigator.cs" />
     <Compile Include="CaretNavigators\DocumentEndNavigator.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="CaretNavigators\LineStartNavigator.cs" />
     <Compile Include="CaretNavigators\LineUpNavigator.cs" />
     <Compile Include="CaretNavigators\NullNavigator.cs" />
+    <Compile Include="CaretNavigators\PageUpNavigator.cs" />
     <Compile Include="CaretNavigators\WordLeftNavigator.cs" />
     <Compile Include="CaretNavigators\WordRightNavigator.cs" />
     <Compile Include="Caret\ICaret.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Document\DocumentChangedEventArgs.cs" />
     <Compile Include="Document\DocumentLine.cs" />
     <Compile Include="EditingDirection.cs" />
+    <Compile Include="IVisualTextInfo.cs" />
     <Compile Include="Layer\TextLayer.cs" />
     <Compile Include="TextRendering\GeneralTextMarkerProperties.cs" />
     <Compile Include="TextRendering\GeneralTextParagraphProperties.cs" />

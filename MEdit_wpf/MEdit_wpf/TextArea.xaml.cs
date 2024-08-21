@@ -36,6 +36,8 @@ namespace MEdit_wpf {
 
         public ICaret Caret => _caret;
 
+        public IVisualTextInfo VisualTextInfo => _visualText;
+
         public VisualText VisualText => _visualText;
 
         public event EventHandler ScrollOffsetChanged;

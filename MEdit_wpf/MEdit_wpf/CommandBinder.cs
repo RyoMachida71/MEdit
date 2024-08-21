@@ -59,6 +59,8 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.SelectToLineStart, shift, Key.Home, OnMoveCaret(CaretMovementType.LineStart, true));
             AddBinding(EditingCommands.MoveToLineEnd, none, Key.End, OnMoveCaret(CaretMovementType.LineEnd, false));
             AddBinding(EditingCommands.SelectToLineEnd, shift, Key.End, OnMoveCaret(CaretMovementType.LineEnd, true));
+            AddBinding(EditingCommands.MoveUpByPage, none, Key.PageUp, OnMoveCaret(CaretMovementType.PageUp, false));
+            AddBinding(EditingCommands.SelectUpByPage, shift, Key.PageUp, OnMoveCaret(CaretMovementType.PageUp, true));
             AddBinding(EditingCommands.MoveToDocumentStart, ctrl, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, false));
             AddBinding(EditingCommands.SelectToDocumentStart, ctrl | shift, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, true));
             AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd, false));
@@ -70,7 +72,7 @@ namespace MEdit_wpf {
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type, bool isSelectionMode) {
             return (s, e) => {
-                _textArea.Caret.Move(CaretNavigatorContainer.GetNavigator(type), isSelectionMode);
+                _textArea.Caret.Move(CaretNavigatorFactory.GetNavigator(type, _textArea), isSelectionMode);
             };
         }
 

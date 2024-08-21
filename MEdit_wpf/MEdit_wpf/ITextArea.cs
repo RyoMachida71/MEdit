@@ -9,7 +9,8 @@ namespace MEdit_wpf
         ITextDocument Document { get; }
         ICaret Caret { get; }
         VisualText VisualText { get; }
-
+        IVisualTextInfo VisualTextInfo { get; }
+        double ActualHeight { get; }
         event EventHandler ScrollOffsetChanged;
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 namespace MEdit_wpf.CaretNavigators {
-    public static class CaretNavigatorContainer {
+    public static class CaretNavigatorFactory {
         private static Dictionary<CaretMovementType, ICaretNavigator> _cache = new Dictionary<CaretMovementType, ICaretNavigator> ();
 
-        public static ICaretNavigator GetNavigator(CaretMovementType type) {
+        public static ICaretNavigator GetNavigator(CaretMovementType type, ITextArea textArea) {
             if (_cache.TryGetValue(type, out var cachedNavigator)) return cachedNavigator;
 
             ICaretNavigator navigator = null;
@@ -29,6 +29,7 @@ namespace MEdit_wpf.CaretNavigators {
                     navigator = new LineDownNavigator();
                     break;
                 case CaretMovementType.PageUp:
+                    navigator = new PageUpNavigator(textArea);
                     break;
                 case CaretMovementType.PageDown:
                     break;

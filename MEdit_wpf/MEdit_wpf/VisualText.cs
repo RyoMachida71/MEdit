@@ -11,15 +11,12 @@ using System.Windows.Media;
 using System.Windows.Media.TextFormatting;
 
 namespace MEdit_wpf {
-    public class VisualText {
+    public class VisualText : IVisualTextInfo {
         private const int FontSize = 12;
-
         private const double MaxParagraphWidth = 32000;
 
-        private List<TextLine> _visualLines = new List<TextLine>();
-
         private double _lineYPos = 0;
-
+        private List<TextLine> _visualLines = new List<TextLine>();
         private TextRunProperties _textRunProperty = new PlainTextRunProperty(new Typeface("Consolas"), FontSize, FontSize, Brushes.Black, Brushes.Transparent, CultureInfo.InvariantCulture);
 
         public VisualText()
