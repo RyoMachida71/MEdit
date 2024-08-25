@@ -12,7 +12,7 @@ namespace MEdit_wpf {
     /// <summary>
     /// TextArea.xaml の相互作用ロジック
     /// </summary>
-    public partial class TextArea : Control, ITextArea, IScrollInfo {
+    public partial class TextArea : ITextArea, IScrollInfo {
 
         private TextDocument _document;
         private SingleCaret _caret;
@@ -44,7 +44,9 @@ namespace MEdit_wpf {
 
         protected override void OnTextInput(TextCompositionEventArgs e) {
             base.OnTextInput(e);
-            var input = new TextInput(e.Text);
+            OnTextInput(new TextInput(e.Text));
+        }
+        public void OnTextInput(TextInput input) {
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
             _visualText.BuildVisualLines(_document.Lines);
             _caretLayer.BringCaretToView();
