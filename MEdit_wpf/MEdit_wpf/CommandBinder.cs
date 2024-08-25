@@ -61,6 +61,8 @@ namespace MEdit_wpf {
             AddBinding(EditingCommands.SelectToLineEnd, shift, Key.End, OnMoveCaret(CaretMovementType.LineEnd, true));
             AddBinding(EditingCommands.MoveUpByPage, none, Key.PageUp, OnMoveCaret(CaretMovementType.PageUp, false));
             AddBinding(EditingCommands.SelectUpByPage, shift, Key.PageUp, OnMoveCaret(CaretMovementType.PageUp, true));
+            AddBinding(EditingCommands.MoveDownByPage, none, Key.PageDown, OnMoveCaret(CaretMovementType.PageDown, false));
+            AddBinding(EditingCommands.SelectDownByPage, shift, Key.PageDown, OnMoveCaret(CaretMovementType.PageDown, true));
             AddBinding(EditingCommands.MoveToDocumentStart, ctrl, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, false));
             AddBinding(EditingCommands.SelectToDocumentStart, ctrl | shift, Key.Home, OnMoveCaret(CaretMovementType.DocumentStart, true));
             AddBinding(EditingCommands.MoveToDocumentEnd, ctrl, Key.End, OnMoveCaret(CaretMovementType.DocumentEnd, false));

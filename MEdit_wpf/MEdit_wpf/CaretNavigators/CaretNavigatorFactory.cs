@@ -8,7 +8,7 @@ namespace MEdit_wpf.CaretNavigators {
         public static ICaretNavigator GetNavigator(CaretMovementType type, ITextArea textArea) {
             if (_cache.TryGetValue(type, out var cachedNavigator)) return cachedNavigator;
 
-            ICaretNavigator navigator = null;
+            ICaretNavigator navigator;
             switch (type) {
                 case CaretMovementType.CharLeft:
                     navigator = new CharLeftNavigator();
@@ -32,6 +32,7 @@ namespace MEdit_wpf.CaretNavigators {
                     navigator = new PageUpNavigator(textArea);
                     break;
                 case CaretMovementType.PageDown:
+                    navigator = new PageDownNavigator(textArea);
                     break;
                 case CaretMovementType.LineStart:
                     navigator = new LineStartNavigator();
