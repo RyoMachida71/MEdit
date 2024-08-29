@@ -6,14 +6,14 @@ namespace MEdit_wpf
     {
         public TextInput(string input)
         {
-            Value = string.IsNullOrEmpty(input) ? string.Empty : ConvertEol(input);
+            Value = string.IsNullOrEmpty(input) ? string.Empty : NormalizeEol(input);
         }
 
         public string Value { get; private set; }
 
         public int Length => Value.Length;
 
-        private string ConvertEol(string input)
+        private string NormalizeEol(string input)
             => (input == "\r" || input == "\n") ? TextDocument.EndOfLine : input.Replace("\n", TextDocument.EndOfLine).Replace("\r\r", "\r");
     }
 }

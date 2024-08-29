@@ -60,7 +60,7 @@ namespace MEdit_wpf.Document {
             OnDocumentChanged(new DocumentChangedEventArgs(GetNewTextPosition(startOffset + input.Length)));
         }
 
-        public void Delete(TextPosition start, TextPosition end, EditingDirection direction) {
+        public void Delete(TextPosition start, TextPosition end, EditingDirection direction = EditingDirection.Forward) {
             if (_buffer.Length == 0) return;
 
             (int startOffset, int endOffset) = GetOffsetRange(start, end);
@@ -96,7 +96,7 @@ namespace MEdit_wpf.Document {
             return offsetAfterDeletion;
         }
 
-        private Tuple<int, int> GetOffsetRange(TextPosition start, TextPosition end) {
+        private (int, int) GetOffsetRange(TextPosition start, TextPosition end) {
             int startOffset;
             int endOffset;
 
@@ -107,7 +107,7 @@ namespace MEdit_wpf.Document {
                 startOffset = this.GetOffset(end);
                 endOffset = this.GetOffset(start);
             }
-            return new Tuple<int, int>(startOffset, endOffset);
+            return (startOffset, endOffset);
         }
 
         private int GetOffset(TextPosition position) {

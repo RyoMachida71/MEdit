@@ -10,11 +10,11 @@ namespace MEdit_wpf.Selection {
 
         public TextPosition StartPosition { get; private set; }
         public TextPosition EndPosition { get; private set; }
-        private bool HasSelection() => this.StartPosition != this.EndPosition;
+        public bool HasSelection => this.StartPosition != this.EndPosition;
 
         public void StartOrExtend(TextPosition start, TextPosition end)
         {
-            if (!HasSelection())
+            if (!HasSelection)
             {
                 this.StartPosition = start;
             }

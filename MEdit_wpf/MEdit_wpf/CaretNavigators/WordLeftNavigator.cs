@@ -11,6 +11,8 @@ namespace MEdit_wpf.CaretNavigators {
             var line = isLineStart ? document.Lines[currentPosition.Row - 1] : document.Lines[currentPosition.Row];
             var parsingPosition = isLineStart ? new TextPosition(line.LineNumber, line.Length) : currentPosition;
 
+            if (parsingPosition.Column == 0) return new TextPosition(line.LineNumber, 0);
+
             for (var column = parsingPosition.Column - 1; column >= 0; --column) {
                 if (column == 0) return new TextPosition(line.LineNumber, 0);
 

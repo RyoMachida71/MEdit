@@ -46,20 +46,24 @@ namespace MEdit_wpf {
             base.OnTextInput(e);
             OnTextInput(new TextInput(e.Text));
         }
+
         public void OnTextInput(TextInput input) {
             _document.Replace(_caret.Selection.StartPosition, _caret.Selection.EndPosition, input);
-            _visualText.BuildVisualLines(_document.Lines);
-            _caretLayer.BringCaretToView();
+            OnEditingCompleted();
         }
+
         public void OnTextDelete(EditingDirection direction) {
             _document.Delete(Caret.Selection.StartPosition, Caret.Selection.EndPosition, direction);
+            OnEditingCompleted();
+        }
+
+        private void OnEditingCompleted() {
             _visualText.BuildVisualLines(_document.Lines);
             _caretLayer.BringCaretToView();
         }
 
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-
             this.OnScrollChange();
         }
 
@@ -82,12 +86,45 @@ namespace MEdit_wpf {
             }
         }
 
-        private void TextArea_GotFocus(object sender, RoutedEventArgs args) {
+        protected override void OnGotFocus(RoutedEventArgs e) {
             if (this.IsFocused) {
                 Keyboard.Focus(this);
             }
         }
 
+        public void Copy() {
+            var copyingText = string.Empty;
+            if (this.Caret.Selection.HasSelection) {
+                copyingText = this.Document.GetText(this.Caret.Selection.StartPosition, this.Caret.Selection.EndPosition);
+            } else {
+                copyingText = this.Document.Lines[this.Caret.Position.Row].Text;
+            }
+            Clipboard.SetText(copyingText);
+        }
+
+        public void Cut() {
+            this.Copy();
+            if (this.Caret.Selection.HasSelection) {
+                _document.Delete(this.Caret.Selection.StartPosition, this.Caret.Selection.EndPosition);
+            } else {
+                var line = _document.Lines[this.Caret.Position.Row];
+                _document.Delete(new TextPosition(line.LineNumber, 0), new TextPosition(line.LineNumber, line.Length));
+            }
+            OnEditingCompleted();
+        }
+
+        public void Paste() {
+            if (!Clipboard.ContainsText()) return;
+
+            OnTextInput(new TextInput(Clipboard.GetText()));
+        }
+
+        private void OnScrollChange() {
+            this.ScrollOwner?.InvalidateScrollInfo();
+            this.ScrollOffsetChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        #region ScrollInfo
         public bool CanVerticallyScroll { get; set; }
 
         public bool CanHorizontallyScroll { get; set; }
@@ -194,10 +231,6 @@ namespace MEdit_wpf {
             OnScrollChange();
             return rectangle;
         }
-
-        private void OnScrollChange() {
-            this.ScrollOwner?.InvalidateScrollInfo();
-            this.ScrollOffsetChanged?.Invoke(this, EventArgs.Empty);
-        }
+        #endregion
     }
 }

@@ -67,5 +67,13 @@ namespace MEdit_Test.TestCaretNavigators {
             var position = navigator.GetNextPosition(new TextPosition(0, 0), doc);
             Assert.That(position, Is.EqualTo(new TextPosition(0, 0)));
         }
+
+        [Test]
+        public void TestReturnsPreviousLineEndAtLineStart() {
+            var doc = new TextDocument("test\r\n\r\ntest");
+            var navigator = new WordLeftNavigator();
+            var position = navigator.GetNextPosition(new TextPosition(2, 0), doc);
+            Assert.That(position, Is.EqualTo(new TextPosition(1, 0)));
+        }
     }
 }

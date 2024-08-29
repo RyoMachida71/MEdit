@@ -70,18 +70,29 @@ namespace MEdit_wpf {
 
             AddBinding(EditingCommands.Delete, none, Key.Delete, OnDeleteText(EditingDirection.Forward));
             AddBinding(EditingCommands.Backspace, none, Key.Back, OnDeleteText(EditingDirection.Backward));
+            AddBinding(ApplicationCommands.Copy, ctrl, Key.C, OnCopy());
+            AddBinding(ApplicationCommands.Cut, ctrl, Key.X, OnCut());
+            AddBinding(ApplicationCommands.Paste, ctrl, Key.V, OnPaste());
         }
 
         private static ExecutedRoutedEventHandler OnMoveCaret(CaretMovementType type, bool isSelectionMode) {
-            return (s, e) => {
-                _textArea.Caret.Move(CaretNavigatorFactory.GetNavigator(type, _textArea), isSelectionMode);
-            };
+            return (s, e) => _textArea.Caret.Move(CaretNavigatorFactory.GetNavigator(type, _textArea), isSelectionMode);
         }
 
         private static ExecutedRoutedEventHandler OnDeleteText(EditingDirection direction) {
-            return (s, e) => {
-                _textArea.OnTextDelete(direction);
-            };
+            return (s, e) => _textArea.OnTextDelete(direction);
+        }
+
+        static ExecutedRoutedEventHandler OnCopy() {
+            return (s, e) => _textArea.Copy();
+        }
+
+        static ExecutedRoutedEventHandler OnCut() {
+            return (s, e) => _textArea.Cut();
+        }
+
+        static ExecutedRoutedEventHandler OnPaste() {
+            return (s, e) => _textArea.Paste();
         }
     }
 }
