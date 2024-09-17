@@ -1,4 +1,6 @@
-﻿namespace History {
+﻿using System.Collections.Generic;
+
+namespace History {
     public class OperationHistory : IUndoable {
         Stack<IUndoable> _undos;
         Stack<IUndoable> _redos;

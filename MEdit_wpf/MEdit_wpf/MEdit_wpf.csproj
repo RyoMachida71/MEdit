@@ -92,6 +92,7 @@
     <Compile Include="Caret\ICaretNavigator.cs" />
     <Compile Include="Document\DocumentChangedEventArgs.cs" />
     <Compile Include="Document\DocumentLine.cs" />
+    <Compile Include="Document\DocumentOperation.cs" />
     <Compile Include="EditingDirection.cs" />
     <Compile Include="IVisualTextInfo.cs" />
     <Compile Include="Layer\TextLayer.cs" />
@@ -155,6 +156,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\History\History.csproj">
+      <Project>{b7f2c3bb-15c7-430f-9918-2eb308b14576}</Project>
+      <Name>History</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
