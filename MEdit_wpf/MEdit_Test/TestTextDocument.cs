@@ -7,19 +7,38 @@ namespace MEdit_Test {
         [Test]
         public void TestAddText() {
             var document = new TextDocument();
+            var changed = new DocumentChangedEventArgs(0, 0, string.Empty, string.Empty, TextPosition.Empty);
+            document.DocumentChanged += (s, e) => changed = e;
+
             document.Replace(new TextPosition(0, 0), new TextPosition(0, 0), new TextInput("test"));
+
             Assert.That(document.Text, Is.EqualTo("test"));
+            Assert.That(changed.DeletedText, Is.EqualTo(string.Empty));
+            Assert.That(changed.InsertedText, Is.EqualTo("test"));
+            Assert.That(changed.OldOffset, Is.EqualTo(0));
+            Assert.That(changed.NewOffset, Is.EqualTo(4));
+            Assert.That(changed.NewPosition, Is.EqualTo(new TextPosition(0, 4)));
 
             document = new TextDocument("test");
             document.Replace(new TextPosition(0, 2), new TextPosition(0, 2), new TextInput("\r\n"));
+
             Assert.That(document.Text, Is.EqualTo("te\r\nst"));
         }
 
         [Test]
         public void TestAddRangeText() {
             var document = new TextDocument("test");
+            var changed = new DocumentChangedEventArgs(0, 0, string.Empty, string.Empty, TextPosition.Empty);
+            document.DocumentChanged += (s, e) => changed = e;
+
             document.Replace(new TextPosition(0, 2), new TextPosition(0, 4), new TextInput("test"));
+
             Assert.That(document.Text, Is.EqualTo("tetest"));
+            Assert.That(changed.DeletedText, Is.EqualTo("st"));
+            Assert.That(changed.InsertedText, Is.EqualTo("test"));
+            Assert.That(changed.OldOffset, Is.EqualTo(2));
+            Assert.That(changed.NewOffset, Is.EqualTo(6));
+            Assert.That(changed.NewPosition, Is.EqualTo(new TextPosition(0, 6)));
         }
 
         [Test]
@@ -63,9 +82,16 @@ namespace MEdit_Test {
             Assert.That(document.Text, Is.EqualTo("est\r\ntest"));
 
             document = new TextDocument(text);
+            var changed = new DocumentChangedEventArgs(0, 0, string.Empty, string.Empty, TextPosition.Empty);
+            document.DocumentChanged += (s, e) => changed = e;
             position = new TextPosition(1, 0);
             document.Delete(position, position, EditingDirection.Backward);
             Assert.That(document.Text, Is.EqualTo("testtest"));
+            Assert.That(changed.DeletedText, Is.EqualTo("\r\n"));
+            Assert.That(changed.InsertedText, Is.EqualTo(string.Empty));
+            Assert.That(changed.OldOffset, Is.EqualTo(6));
+            Assert.That(changed.NewOffset, Is.EqualTo(4));
+            Assert.That(changed.NewPosition, Is.EqualTo(new TextPosition(0, 4)));
         }
 
         [Test]
@@ -73,8 +99,15 @@ namespace MEdit_Test {
         {
             var text = "test\r\ntest";
             var document = new TextDocument(text);
+            var changed = new DocumentChangedEventArgs(0, 0, string.Empty, string.Empty, TextPosition.Empty);
+            document.DocumentChanged += (s, e) => changed = e;
             document.Delete(new TextPosition(0, 1), new TextPosition(0, 3), EditingDirection.Forward);
             Assert.That(document.Text, Is.EqualTo("tt\r\ntest"));
+            Assert.That(changed.DeletedText, Is.EqualTo("es"));
+            Assert.That(changed.InsertedText, Is.EqualTo(string.Empty));
+            Assert.That(changed.OldOffset, Is.EqualTo(1));
+            Assert.That(changed.NewOffset, Is.EqualTo(1));
+            Assert.That(changed.NewPosition, Is.EqualTo(new TextPosition(0, 1)));
 
             document = new TextDocument(text);
             document.Delete(new TextPosition(0, 1), new TextPosition(0, 3), EditingDirection.Backward);
