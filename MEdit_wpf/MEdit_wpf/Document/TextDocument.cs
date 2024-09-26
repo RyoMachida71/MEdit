@@ -62,6 +62,20 @@ namespace MEdit_wpf.Document {
                                                            GetNewTextPosition(newOffset)));
         }
 
+        internal void Replace(int start, int length, string text) {
+            if (start < 0 || length < 0) return;
+
+            _buffer.Remove(start, length);
+            _buffer.Insert(start, text);
+
+            var newOffset = start + text.Length;
+            OnDocumentChanged(new DocumentChangedEventArgs(start,
+                                                           newOffset,
+                                                           string.Empty,
+                                                           string.Empty,
+                                                           GetNewTextPosition(newOffset)));
+        }
+
         public void Delete(TextPosition start, TextPosition end, EditingDirection direction = EditingDirection.Forward) {
             if (_buffer.Length == 0) return;
 

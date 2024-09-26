@@ -5,14 +5,14 @@ namespace MEdit_wpf.Document {
 
         public DocumentChangedEventArgs(int oldOffset,
                                         int newOffset,
-                                        string deletetedText,
-                                        string insertedText,
+                                        string textBeforeChange,
+                                        string textAfterChange,
                                         TextPosition newPosition)
         {
             this.OldOffset = oldOffset;
             this.NewOffset = newOffset;
-            this.DeletedText = deletetedText;
-            this.InsertedText = insertedText;
+            this.TextBeforeChange = textBeforeChange;
+            this.TextAfterChange = textAfterChange;
             this.NewPosition = newPosition;
         }
 
@@ -20,9 +20,9 @@ namespace MEdit_wpf.Document {
 
         public int NewOffset { get; private set; }
 
-        public string DeletedText { get; private set; }
+        public string TextBeforeChange { get; private set; }
 
-        public string InsertedText { get; private set; }
+        public string TextAfterChange { get; private set; }
 
         public TextPosition NewPosition { get; private set; }
     }
